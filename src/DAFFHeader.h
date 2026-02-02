@@ -252,7 +252,7 @@ struct DAFFRecordChannelDescIR {
 	int32_t iMetaDataIndex;   //!@ Index in metadata table (C-style indexing: beginning with 0)
 	uint64_t ui64DataOffset;  //!@ Position inside the file where samples/coefficients reside (in bytes)
 	int32_t iLeadingZeros;    //!@ Offset of actual data within impulse response (leading zeros that are not included in
-							  //!DAFF data)
+							  //! DAFF data)
 	int32_t iElementLength;  //!@ Number of data values (length of element of record channel for a single channel, only)
 #pragma pack(pop)
 

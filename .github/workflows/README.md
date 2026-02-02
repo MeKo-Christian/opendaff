@@ -5,6 +5,7 @@ This directory contains CI/CD workflows for the OpenDAFF project.
 ## Workflows
 
 ### CI (ci.yml)
+
 [![CI](https://github.com/MeKo-Tech/opendaff/actions/workflows/ci.yml/badge.svg)](https://github.com/MeKo-Tech/opendaff/actions/workflows/ci.yml)
 
 Main continuous integration workflow that runs on every push and pull request:
@@ -16,6 +17,7 @@ Main continuous integration workflow that runs on every push and pull request:
 - **Can Build Tools**: Verifies DAFFTool and DAFFViewer can be built
 
 ### Bindings (bindings.yml)
+
 [![Bindings](https://github.com/MeKo-Tech/opendaff/actions/workflows/bindings.yml/badge.svg)](https://github.com/MeKo-Tech/opendaff/actions/workflows/bindings.yml)
 
 Specialized testing for language bindings:
@@ -26,16 +28,18 @@ Specialized testing for language bindings:
 - **MATLAB Manual**: Verifies MATLAB binding source files exist
 
 ### Release (release.yml)
+
 [![Release](https://github.com/MeKo-Tech/opendaff/actions/workflows/release.yml/badge.svg)](https://github.com/MeKo-Tech/opendaff/actions/workflows/release.yml)
 
 Creates release builds for all platforms:
 
-- Triggered on version tags (v*.*.*)
+- Triggered on version tags (v*.*.\*)
 - Builds optimized binaries for Linux, macOS, and Windows
 - Runs tests before packaging
 - Creates GitHub releases with downloadable artifacts
 
 ### Documentation (docs.yml)
+
 [![Documentation](https://github.com/MeKo-Tech/opendaff/actions/workflows/docs.yml/badge.svg)](https://github.com/MeKo-Tech/opendaff/actions/workflows/docs.yml)
 
 Generates and deploys Doxygen documentation:
@@ -76,43 +80,54 @@ Add these to your main README.md:
 ## Workflow Dependencies
 
 ### Core CI Requirements
+
 - **Ubuntu**: cmake, build-essential, libfftw3-dev, libsndfile1-dev
 - **macOS**: cmake, fftw, libsndfile
 - **Windows**: cmake (via Chocolatey)
 
 ### Visualization Requirements
+
 - **Ubuntu**: qtbase5-dev, qttools5-dev, libvtk9-dev
 - **macOS**: qt@5, vtk
 
 ### Python Bindings
+
 - Python 3.8+ with setuptools and wheel
 
 ### C# Bindings
+
 - .NET SDK 8.0
 - MSBuild (Windows)
 
 ### MATLAB Bindings
+
 - MATLAB R2023b or later
 
 ### Documentation
+
 - doxygen
 - graphviz
 
 ## Troubleshooting
 
 ### Formatting Failures
+
 If the formatting check fails, run locally:
+
 ```bash
 just fmt  # Auto-format all files
 ```
 
 ### Build Failures
+
 Check the specific job logs in GitHub Actions. Common issues:
+
 - Missing dependencies (see workflow file for required packages)
 - CMake configuration errors (check CMakeLists.txt)
 - Test failures (see test output in logs)
 
 ### Binding Build Failures
+
 - **Python**: Ensure Python version compatibility
 - **C#**: Windows-only, requires .NET SDK
 - **MATLAB**: Requires MATLAB installation or MATLAB Actions setup
@@ -120,6 +135,7 @@ Check the specific job logs in GitHub Actions. Common issues:
 ## Contributing
 
 When adding new features:
+
 1. Ensure formatting passes (`just fmt`)
 2. Add tests if applicable
 3. Update CMake configuration if needed

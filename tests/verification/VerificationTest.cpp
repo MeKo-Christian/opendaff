@@ -29,7 +29,7 @@ int main()
 		cerr << "Test file 'verify_1x1_orient_0-0-0.daff' not found." << endl;
 		cerr << "Run daff_write_test.m first to create the daff files." << endl;
 		cerr << "Skipping verification test (this is not a failure)." << endl;
-		return 0; // Exit successfully - test files are optional
+		return 0;  // Exit successfully - test files are optional
 	}
 
 	cout << r->toString() << endl;

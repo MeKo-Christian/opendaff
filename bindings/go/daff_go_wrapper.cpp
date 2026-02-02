@@ -10,24 +10,29 @@
  */
 
 #include "daff_go_wrapper.h"
+
 #include <DAFF.h>
-#include <string>
+
 #include <cstring>
+#include <string>
 #include <vector>
 
 // Thread-local storage for error messages
 static thread_local std::string g_lastError;
 
-void SetLastError(const std::string& error) {
+void SetLastError(const std::string& error)
+{
 	g_lastError = error;
 }
 
-const char* GoDAFF_GetLastError() {
+const char* GoDAFF_GetLastError()
+{
 	return g_lastError.c_str();
 }
 
 // Reader operations
-GoDAFFReaderHandle GoDAFF_Create() {
+GoDAFFReaderHandle GoDAFF_Create()
+{
 	try {
 		DAFFReader* reader = DAFFReader::create();
 		return static_cast<GoDAFFReaderHandle>(reader);
@@ -37,14 +42,16 @@ GoDAFFReaderHandle GoDAFF_Create() {
 	}
 }
 
-void GoDAFF_Destroy(GoDAFFReaderHandle handle) {
+void GoDAFF_Destroy(GoDAFFReaderHandle handle)
+{
 	if (handle) {
 		DAFFReader* reader = static_cast<DAFFReader*>(handle);
 		delete reader;
 	}
 }
 
-bool GoDAFF_OpenFile(GoDAFFReaderHandle handle, const char* filename) {
+bool GoDAFF_OpenFile(GoDAFFReaderHandle handle, const char* filename)
+{
 	if (!handle || !filename) {
 		SetLastError("Invalid handle or filename");
 		return false;
@@ -63,14 +70,16 @@ bool GoDAFF_OpenFile(GoDAFFReaderHandle handle, const char* filename) {
 	}
 }
 
-void GoDAFF_Close(GoDAFFReaderHandle handle) {
+void GoDAFF_Close(GoDAFFReaderHandle handle)
+{
 	if (handle) {
 		DAFFReader* reader = static_cast<DAFFReader*>(handle);
 		reader->closeFile();
 	}
 }
 
-bool GoDAFF_IsValid(GoDAFFReaderHandle handle) {
+bool GoDAFF_IsValid(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return false;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
@@ -78,63 +87,72 @@ bool GoDAFF_IsValid(GoDAFFReaderHandle handle) {
 }
 
 // File properties
-int GoDAFF_GetContentType(GoDAFFReaderHandle handle) {
+int GoDAFF_GetContentType(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return -1;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
 	return reader->getProperties()->getContentType();
 }
 
-int GoDAFF_GetQuantization(GoDAFFReaderHandle handle) {
+int GoDAFF_GetQuantization(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return -1;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
 	return reader->getProperties()->getQuantization();
 }
 
-int GoDAFF_GetNumChannels(GoDAFFReaderHandle handle) {
+int GoDAFF_GetNumChannels(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return -1;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
 	return reader->getProperties()->getNumberOfChannels();
 }
 
-int GoDAFF_GetNumRecords(GoDAFFReaderHandle handle) {
+int GoDAFF_GetNumRecords(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return -1;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
 	return reader->getProperties()->getNumberOfRecords();
 }
 
-float GoDAFF_GetAlphaResolution(GoDAFFReaderHandle handle) {
+float GoDAFF_GetAlphaResolution(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return -1.0f;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
 	return reader->getProperties()->getAlphaResolution();
 }
 
-float GoDAFF_GetBetaResolution(GoDAFFReaderHandle handle) {
+float GoDAFF_GetBetaResolution(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return -1.0f;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
 	return reader->getProperties()->getBetaResolution();
 }
 
-int GoDAFF_GetAlphaPoints(GoDAFFReaderHandle handle) {
+int GoDAFF_GetAlphaPoints(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return -1;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
 	return reader->getProperties()->getAlphaPoints();
 }
 
-int GoDAFF_GetBetaPoints(GoDAFFReaderHandle handle) {
+int GoDAFF_GetBetaPoints(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return -1;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
 	return reader->getProperties()->getBetaPoints();
 }
 
-int GoDAFF_GetOrientationYPR(GoDAFFReaderHandle handle, float* yaw, float* pitch, float* roll) {
+int GoDAFF_GetOrientationYPR(GoDAFFReaderHandle handle, float* yaw, float* pitch, float* roll)
+{
 	if (!handle || !yaw || !pitch || !roll)
 		return -1;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
@@ -147,14 +165,16 @@ int GoDAFF_GetOrientationYPR(GoDAFFReaderHandle handle, float* yaw, float* pitch
 }
 
 // Metadata operations
-bool GoDAFF_HasMetadata(GoDAFFReaderHandle handle, const char* key) {
+bool GoDAFF_HasMetadata(GoDAFFReaderHandle handle, const char* key)
+{
 	if (!handle || !key)
 		return false;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
 	return reader->getMetadata()->hasKey(key);
 }
 
-const char* GoDAFF_GetMetadataString(GoDAFFReaderHandle handle, const char* key) {
+const char* GoDAFF_GetMetadataString(GoDAFFReaderHandle handle, const char* key)
+{
 	if (!handle || !key)
 		return nullptr;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
@@ -165,7 +185,8 @@ const char* GoDAFF_GetMetadataString(GoDAFFReaderHandle handle, const char* key)
 	return value.c_str();
 }
 
-bool GoDAFF_GetMetadataFloat(GoDAFFReaderHandle handle, const char* key, float* value) {
+bool GoDAFF_GetMetadataFloat(GoDAFFReaderHandle handle, const char* key, float* value)
+{
 	if (!handle || !key || !value)
 		return false;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
@@ -175,7 +196,8 @@ bool GoDAFF_GetMetadataFloat(GoDAFFReaderHandle handle, const char* key, float* 
 	return true;
 }
 
-bool GoDAFF_GetMetadataBool(GoDAFFReaderHandle handle, const char* key, bool* value) {
+bool GoDAFF_GetMetadataBool(GoDAFFReaderHandle handle, const char* key, bool* value)
+{
 	if (!handle || !key || !value)
 		return false;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
@@ -186,7 +208,8 @@ bool GoDAFF_GetMetadataBool(GoDAFFReaderHandle handle, const char* key, bool* va
 }
 
 // Content access - Impulse Response (IR)
-GoDAFFContentHandle GoDAFF_GetContentIR(GoDAFFReaderHandle handle) {
+GoDAFFContentHandle GoDAFF_GetContentIR(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return nullptr;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
@@ -195,21 +218,24 @@ GoDAFFContentHandle GoDAFF_GetContentIR(GoDAFFReaderHandle handle) {
 	return static_cast<GoDAFFContentHandle>(dynamic_cast<DAFFContentIR*>(reader->getContent()));
 }
 
-int GoDAFF_ContentIR_GetFilterLength(GoDAFFContentHandle content) {
+int GoDAFF_ContentIR_GetFilterLength(GoDAFFContentHandle content)
+{
 	if (!content)
 		return -1;
 	DAFFContentIR* ir = static_cast<DAFFContentIR*>(content);
 	return ir->getFilterLength();
 }
 
-int GoDAFF_ContentIR_GetSamplerate(GoDAFFContentHandle content) {
+int GoDAFF_ContentIR_GetSamplerate(GoDAFFContentHandle content)
+{
 	if (!content)
 		return -1;
 	DAFFContentIR* ir = static_cast<DAFFContentIR*>(content);
 	return ir->getSamplerate();
 }
 
-int GoDAFF_ContentIR_GetNearestNeighbour(GoDAFFContentHandle content, double phi, double theta) {
+int GoDAFF_ContentIR_GetNearestNeighbour(GoDAFFContentHandle content, double phi, double theta)
+{
 	if (!content)
 		return -1;
 	DAFFContentIR* ir = static_cast<DAFFContentIR*>(content);
@@ -218,8 +244,8 @@ int GoDAFF_ContentIR_GetNearestNeighbour(GoDAFFContentHandle content, double phi
 	return recordIndex;
 }
 
-bool GoDAFF_ContentIR_GetRecordCoords(GoDAFFContentHandle content, int recordIndex, double* alpha,
-									   double* beta) {
+bool GoDAFF_ContentIR_GetRecordCoords(GoDAFFContentHandle content, int recordIndex, double* alpha, double* beta)
+{
 	if (!content || !alpha || !beta)
 		return false;
 	DAFFContentIR* ir = static_cast<DAFFContentIR*>(content);
@@ -231,7 +257,8 @@ bool GoDAFF_ContentIR_GetRecordCoords(GoDAFFContentHandle content, int recordInd
 }
 
 bool GoDAFF_ContentIR_GetFilterCoeffs(GoDAFFContentHandle content, int recordIndex, int channel, float* coeffs,
-									   int bufferSize) {
+									  int bufferSize)
+{
 	if (!content || !coeffs)
 		return false;
 	DAFFContentIR* ir = static_cast<DAFFContentIR*>(content);
@@ -242,7 +269,8 @@ bool GoDAFF_ContentIR_GetFilterCoeffs(GoDAFFContentHandle content, int recordInd
 }
 
 // Content access - Magnitude Spectrum (MS)
-GoDAFFContentHandle GoDAFF_GetContentMS(GoDAFFReaderHandle handle) {
+GoDAFFContentHandle GoDAFF_GetContentMS(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return nullptr;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
@@ -251,14 +279,16 @@ GoDAFFContentHandle GoDAFF_GetContentMS(GoDAFFReaderHandle handle) {
 	return static_cast<GoDAFFContentHandle>(dynamic_cast<DAFFContentMS*>(reader->getContent()));
 }
 
-int GoDAFF_ContentMS_GetNumFrequencies(GoDAFFContentHandle content) {
+int GoDAFF_ContentMS_GetNumFrequencies(GoDAFFContentHandle content)
+{
 	if (!content)
 		return -1;
 	DAFFContentMS* ms = static_cast<DAFFContentMS*>(content);
 	return ms->getNumFrequencies();
 }
 
-int GoDAFF_ContentMS_GetNearestNeighbour(GoDAFFContentHandle content, double phi, double theta) {
+int GoDAFF_ContentMS_GetNearestNeighbour(GoDAFFContentHandle content, double phi, double theta)
+{
 	if (!content)
 		return -1;
 	DAFFContentMS* ms = static_cast<DAFFContentMS*>(content);
@@ -267,7 +297,8 @@ int GoDAFF_ContentMS_GetNearestNeighbour(GoDAFFContentHandle content, double phi
 	return recordIndex;
 }
 
-bool GoDAFF_ContentMS_GetRecordCoords(GoDAFFContentHandle content, int recordIndex, double* alpha, double* beta) {
+bool GoDAFF_ContentMS_GetRecordCoords(GoDAFFContentHandle content, int recordIndex, double* alpha, double* beta)
+{
 	if (!content || !alpha || !beta)
 		return false;
 	DAFFContentMS* ms = static_cast<DAFFContentMS*>(content);
@@ -279,7 +310,8 @@ bool GoDAFF_ContentMS_GetRecordCoords(GoDAFFContentHandle content, int recordInd
 }
 
 bool GoDAFF_ContentMS_GetMagnitudes(GoDAFFContentHandle content, int recordIndex, int channel, float* magnitudes,
-									int bufferSize) {
+									int bufferSize)
+{
 	if (!content || !magnitudes)
 		return false;
 	DAFFContentMS* ms = static_cast<DAFFContentMS*>(content);
@@ -290,7 +322,8 @@ bool GoDAFF_ContentMS_GetMagnitudes(GoDAFFContentHandle content, int recordIndex
 }
 
 // Content access - Phase Spectrum (PS)
-GoDAFFContentHandle GoDAFF_GetContentPS(GoDAFFReaderHandle handle) {
+GoDAFFContentHandle GoDAFF_GetContentPS(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return nullptr;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
@@ -299,14 +332,16 @@ GoDAFFContentHandle GoDAFF_GetContentPS(GoDAFFReaderHandle handle) {
 	return static_cast<GoDAFFContentHandle>(dynamic_cast<DAFFContentPS*>(reader->getContent()));
 }
 
-int GoDAFF_ContentPS_GetNumFrequencies(GoDAFFContentHandle content) {
+int GoDAFF_ContentPS_GetNumFrequencies(GoDAFFContentHandle content)
+{
 	if (!content)
 		return -1;
 	DAFFContentPS* ps = static_cast<DAFFContentPS*>(content);
 	return ps->getNumFrequencies();
 }
 
-int GoDAFF_ContentPS_GetNearestNeighbour(GoDAFFContentHandle content, double phi, double theta) {
+int GoDAFF_ContentPS_GetNearestNeighbour(GoDAFFContentHandle content, double phi, double theta)
+{
 	if (!content)
 		return -1;
 	DAFFContentPS* ps = static_cast<DAFFContentPS*>(content);
@@ -315,7 +350,8 @@ int GoDAFF_ContentPS_GetNearestNeighbour(GoDAFFContentHandle content, double phi
 	return recordIndex;
 }
 
-bool GoDAFF_ContentPS_GetRecordCoords(GoDAFFContentHandle content, int recordIndex, double* alpha, double* beta) {
+bool GoDAFF_ContentPS_GetRecordCoords(GoDAFFContentHandle content, int recordIndex, double* alpha, double* beta)
+{
 	if (!content || !alpha || !beta)
 		return false;
 	DAFFContentPS* ps = static_cast<DAFFContentPS*>(content);
@@ -327,7 +363,8 @@ bool GoDAFF_ContentPS_GetRecordCoords(GoDAFFContentHandle content, int recordInd
 }
 
 bool GoDAFF_ContentPS_GetPhases(GoDAFFContentHandle content, int recordIndex, int channel, float* phases,
-								int bufferSize) {
+								int bufferSize)
+{
 	if (!content || !phases)
 		return false;
 	DAFFContentPS* ps = static_cast<DAFFContentPS*>(content);
@@ -338,7 +375,8 @@ bool GoDAFF_ContentPS_GetPhases(GoDAFFContentHandle content, int recordIndex, in
 }
 
 // Content access - Magnitude-Phase Spectrum (MPS)
-GoDAFFContentHandle GoDAFF_GetContentMPS(GoDAFFReaderHandle handle) {
+GoDAFFContentHandle GoDAFF_GetContentMPS(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return nullptr;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
@@ -347,14 +385,16 @@ GoDAFFContentHandle GoDAFF_GetContentMPS(GoDAFFReaderHandle handle) {
 	return static_cast<GoDAFFContentHandle>(dynamic_cast<DAFFContentMPS*>(reader->getContent()));
 }
 
-int GoDAFF_ContentMPS_GetNumFrequencies(GoDAFFContentHandle content) {
+int GoDAFF_ContentMPS_GetNumFrequencies(GoDAFFContentHandle content)
+{
 	if (!content)
 		return -1;
 	DAFFContentMPS* mps = static_cast<DAFFContentMPS*>(content);
 	return mps->getNumFrequencies();
 }
 
-int GoDAFF_ContentMPS_GetNearestNeighbour(GoDAFFContentHandle content, double phi, double theta) {
+int GoDAFF_ContentMPS_GetNearestNeighbour(GoDAFFContentHandle content, double phi, double theta)
+{
 	if (!content)
 		return -1;
 	DAFFContentMPS* mps = static_cast<DAFFContentMPS*>(content);
@@ -363,7 +403,8 @@ int GoDAFF_ContentMPS_GetNearestNeighbour(GoDAFFContentHandle content, double ph
 	return recordIndex;
 }
 
-bool GoDAFF_ContentMPS_GetRecordCoords(GoDAFFContentHandle content, int recordIndex, double* alpha, double* beta) {
+bool GoDAFF_ContentMPS_GetRecordCoords(GoDAFFContentHandle content, int recordIndex, double* alpha, double* beta)
+{
 	if (!content || !alpha || !beta)
 		return false;
 	DAFFContentMPS* mps = static_cast<DAFFContentMPS*>(content);
@@ -375,7 +416,8 @@ bool GoDAFF_ContentMPS_GetRecordCoords(GoDAFFContentHandle content, int recordIn
 }
 
 bool GoDAFF_ContentMPS_GetCoefficients(GoDAFFContentHandle content, int recordIndex, int channel, float* magnitudes,
-									   float* phases, int bufferSize) {
+									   float* phases, int bufferSize)
+{
 	if (!content || !magnitudes || !phases)
 		return false;
 	DAFFContentMPS* mps = static_cast<DAFFContentMPS*>(content);
@@ -399,7 +441,8 @@ bool GoDAFF_ContentMPS_GetCoefficients(GoDAFFContentHandle content, int recordIn
 }
 
 // Content access - DFT
-GoDAFFContentHandle GoDAFF_GetContentDFT(GoDAFFReaderHandle handle) {
+GoDAFFContentHandle GoDAFF_GetContentDFT(GoDAFFReaderHandle handle)
+{
 	if (!handle)
 		return nullptr;
 	DAFFReader* reader = static_cast<DAFFReader*>(handle);
@@ -408,21 +451,24 @@ GoDAFFContentHandle GoDAFF_GetContentDFT(GoDAFFReaderHandle handle) {
 	return static_cast<GoDAFFContentHandle>(dynamic_cast<DAFFContentDFT*>(reader->getContent()));
 }
 
-int GoDAFF_ContentDFT_GetNumDFTCoeffs(GoDAFFContentHandle content) {
+int GoDAFF_ContentDFT_GetNumDFTCoeffs(GoDAFFContentHandle content)
+{
 	if (!content)
 		return -1;
 	DAFFContentDFT* dft = static_cast<DAFFContentDFT*>(content);
 	return dft->getNumDFTCoeffs();
 }
 
-bool GoDAFF_ContentDFT_IsSymmetric(GoDAFFContentHandle content) {
+bool GoDAFF_ContentDFT_IsSymmetric(GoDAFFContentHandle content)
+{
 	if (!content)
 		return false;
 	DAFFContentDFT* dft = static_cast<DAFFContentDFT*>(content);
 	return dft->isSymmetric();
 }
 
-int GoDAFF_ContentDFT_GetNearestNeighbour(GoDAFFContentHandle content, double phi, double theta) {
+int GoDAFF_ContentDFT_GetNearestNeighbour(GoDAFFContentHandle content, double phi, double theta)
+{
 	if (!content)
 		return -1;
 	DAFFContentDFT* dft = static_cast<DAFFContentDFT*>(content);
@@ -431,7 +477,8 @@ int GoDAFF_ContentDFT_GetNearestNeighbour(GoDAFFContentHandle content, double ph
 	return recordIndex;
 }
 
-bool GoDAFF_ContentDFT_GetRecordCoords(GoDAFFContentHandle content, int recordIndex, double* alpha, double* beta) {
+bool GoDAFF_ContentDFT_GetRecordCoords(GoDAFFContentHandle content, int recordIndex, double* alpha, double* beta)
+{
 	if (!content || !alpha || !beta)
 		return false;
 	DAFFContentDFT* dft = static_cast<DAFFContentDFT*>(content);
@@ -443,12 +490,13 @@ bool GoDAFF_ContentDFT_GetRecordCoords(GoDAFFContentHandle content, int recordIn
 }
 
 bool GoDAFF_ContentDFT_GetDFTCoeffs(GoDAFFContentHandle content, int recordIndex, int channel, float* coeffs,
-									int bufferSize) {
+									int bufferSize)
+{
 	if (!content || !coeffs)
 		return false;
 	DAFFContentDFT* dft = static_cast<DAFFContentDFT*>(content);
 	if (bufferSize < dft->getNumDFTCoeffs() * 2)
-		return false; // DFT coeffs are complex (real, imag)
+		return false;  // DFT coeffs are complex (real, imag)
 	dft->getDFTCoeffs(recordIndex, channel, coeffs);
 	return true;
 }

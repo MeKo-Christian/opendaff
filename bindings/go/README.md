@@ -232,6 +232,7 @@ if err != nil {
 ```
 
 Common errors:
+
 - File not found or cannot be opened
 - Invalid file format
 - Wrong content type requested
@@ -259,6 +260,7 @@ For integration tests with actual DAFF files, place test files in `testdata/` an
 ## Examples
 
 See `daff_test.go` for complete examples of:
+
 - Opening and reading DAFF files
 - Handling different content types
 - Querying directional data
@@ -301,6 +303,7 @@ CGO complicates cross-compilation. For building on a different platform:
 ## Contributing
 
 Contributions are welcome! Please ensure:
+
 - Code follows Go conventions (`gofmt`, `golint`)
 - Tests pass and new features include tests
 - Documentation is updated
@@ -320,6 +323,7 @@ Copyright 2016-2018 Institute of Technical Acoustics (ITA), RWTH Aachen Universi
 ## Support
 
 For issues and questions:
+
 - Open an issue on GitHub
 - Consult the main OpenDAFF documentation
 - Check the examples in `daff_test.go`

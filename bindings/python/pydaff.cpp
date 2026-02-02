@@ -108,7 +108,8 @@ static PyObject* daff_nearest_neighbour_index(PyObject*, PyObject* args, PyObjec
 	double dAngle2Deg;
 
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iidd:nearest_neighbour_index", const_cast<char**>(keywords), &iHandle, &iView, &dAngle1Deg, &dAngle2Deg))
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iidd:nearest_neighbour_index", const_cast<char**>(keywords),
+									 &iHandle, &iView, &dAngle1Deg, &dAngle2Deg))
 		return NULL;
 
 	if (!ValidHandle(iHandle)) {
@@ -146,7 +147,8 @@ static PyObject* daff_nearest_neighbour_record(PyObject*, PyObject* args, PyObje
 	// Initialize a new list
 	PyObject* record = PyList_New(0);
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iidd:nearest_neighbour_record", const_cast<char**>(keywords), &iHandle, &iView, &dAngle1Deg, &dAngle2Deg))
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iidd:nearest_neighbour_record", const_cast<char**>(keywords),
+									 &iHandle, &iView, &dAngle1Deg, &dAngle2Deg))
 		return NULL;
 
 	if (!ValidHandle(iHandle)) {
@@ -623,15 +625,17 @@ static PyObject* daff_properties(PyObject*, PyObject* args, PyObject* kwargs)
 // ------------------ module definitions ------------------ //
 
 static PyMethodDef daff_methods[] = {
-	{"open", (PyCFunction)(void(*)(void))daff_open, METH_VARARGS | METH_KEYWORDS, open_doc},
-	{"close", (PyCFunction)(void(*)(void))daff_close, METH_VARARGS | METH_KEYWORDS, no_doc},
-	{"nearest_neighbour_index", (PyCFunction)(void(*)(void))daff_nearest_neighbour_index, METH_VARARGS | METH_KEYWORDS, no_doc},
-	{"nearest_neighbour_record", (PyCFunction)(void(*)(void))daff_nearest_neighbour_record, METH_VARARGS | METH_KEYWORDS, no_doc},
-	{"record", (PyCFunction)(void(*)(void))daff_record, METH_VARARGS | METH_KEYWORDS, no_doc},
-	{"content_type", (PyCFunction)(void(*)(void))daff_content_type, METH_VARARGS | METH_KEYWORDS, no_doc},
-	{"content_type_str", (PyCFunction)(void(*)(void))daff_content_type_str, METH_VARARGS | METH_KEYWORDS, no_doc},
-	{"metadata", (PyCFunction)(void(*)(void))daff_metadata, METH_VARARGS | METH_KEYWORDS, no_doc},
-	{"properties", (PyCFunction)(void(*)(void))daff_properties, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"open", (PyCFunction)(void (*)(void))daff_open, METH_VARARGS | METH_KEYWORDS, open_doc},
+	{"close", (PyCFunction)(void (*)(void))daff_close, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"nearest_neighbour_index", (PyCFunction)(void (*)(void))daff_nearest_neighbour_index, METH_VARARGS | METH_KEYWORDS,
+	 no_doc},
+	{"nearest_neighbour_record", (PyCFunction)(void (*)(void))daff_nearest_neighbour_record,
+	 METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"record", (PyCFunction)(void (*)(void))daff_record, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"content_type", (PyCFunction)(void (*)(void))daff_content_type, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"content_type_str", (PyCFunction)(void (*)(void))daff_content_type_str, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"metadata", (PyCFunction)(void (*)(void))daff_metadata, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"properties", (PyCFunction)(void (*)(void))daff_properties, METH_VARARGS | METH_KEYWORDS, no_doc},
 	{NULL, NULL, 0, NULL} /* Sentinel */
 };
 

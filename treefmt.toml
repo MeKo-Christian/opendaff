@@ -102,11 +102,12 @@ command = "black"
 includes = ["*.py"]
 priority = 1
 
-# C# formatter (if available)
-[formatter.dotnet-format]
-command = "dotnet"
-options = ["format"]
-includes = ["*.cs"]
+# C# formatter - disabled because dotnet-format requires project/solution files
+# To format C# code manually, run: dotnet format bindings/csharp/DAFFTest.csproj
+# [formatter.dotnet-format]
+# command = "dotnet"
+# options = ["format"]
+# includes = ["*.cs"]
 
 # Markdown, YAML, JSON formatter
 [formatter.prettier]
