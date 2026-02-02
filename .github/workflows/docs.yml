@@ -20,13 +20,10 @@ jobs:
           sudo apt-get install -y doxygen graphviz
 
       - name: Configure CMake with documentation
-        run: |
-          cmake -B build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DOPENDAFF_BUILD_DAFF_DOCUMENTATION=ON
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DOPENDAFF_BUILD_DAFF_DOCUMENTATION=ON
 
       - name: Build documentation
-        run: cmake --build build --target doc
+        run: cmake --build build --target DAFFDoc
 
       - name: Upload documentation
         uses: actions/upload-artifact@v4

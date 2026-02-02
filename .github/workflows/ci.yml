@@ -82,13 +82,7 @@ jobs:
           choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
 
       - name: Configure CMake (Core Library)
-        run: |
-          cmake -B build \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DOPENDAFF_BUILD_DAFF_TESTS=ON \
-            -DOPENDAFF_BUILD_DAFF_TOOL=OFF \
-            -DOPENDAFF_BUILD_DAFF_VIEWER=OFF \
-            -DOPENDAFF_WITH_DAFFVIZ=OFF
+        run: cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DOPENDAFF_BUILD_DAFF_TESTS=ON -DOPENDAFF_BUILD_DAFF_TOOL=OFF -DOPENDAFF_BUILD_DAFF_VIEWER=OFF -DOPENDAFF_WITH_DAFFVIZ=OFF
 
       - name: Build
         run: cmake --build build --config ${{ matrix.build_type }}
@@ -144,12 +138,7 @@ jobs:
           brew install cmake fftw libsndfile qt@5 vtk
 
       - name: Configure CMake (with DAFFViz)
-        run: |
-          cmake -B build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DOPENDAFF_WITH_DAFFVIZ=ON \
-            -DOPENDAFF_BUILD_DAFF_TOOL=ON \
-            -DOPENDAFF_BUILD_DAFF_TESTS=ON
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DOPENDAFF_WITH_DAFFVIZ=ON -DOPENDAFF_BUILD_DAFF_TOOL=ON -DOPENDAFF_BUILD_DAFF_TESTS=ON
 
       - name: Build
         run: cmake --build build --config Release
@@ -269,13 +258,7 @@ jobs:
             libvtk9-dev
 
       - name: Configure with all applications
-        run: |
-          cmake -B build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DOPENDAFF_WITH_DAFFVIZ=ON \
-            -DOPENDAFF_BUILD_DAFF_TOOL=ON \
-            -DOPENDAFF_BUILD_DAFF_VIEWER=ON \
-            -DOPENDAFF_BUILD_DAFF_TESTS=ON
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DOPENDAFF_WITH_DAFFVIZ=ON -DOPENDAFF_BUILD_DAFF_TOOL=ON -DOPENDAFF_BUILD_DAFF_VIEWER=ON -DOPENDAFF_BUILD_DAFF_TESTS=ON
 
       - name: Build all
         run: cmake --build build --config Release
