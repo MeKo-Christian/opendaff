@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 2.8 )
+cmake_minimum_required( VERSION 3.10 )
 
 if( OPENDAFF_BUILD_DAFFLIBS_SHARED )
 	add_definitions( -DDAFF_DLL )
