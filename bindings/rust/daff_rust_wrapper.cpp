@@ -496,7 +496,7 @@ bool RustDAFF_ContentDFT_GetDFTCoeffs(RustDAFFContentHandle content, int recordI
 		return false;
 	DAFFContentDFT* dft = static_cast<DAFFContentDFT*>(content);
 	if (bufferSize < dft->getNumDFTCoeffs() * 2)
-		return false; // DFT coeffs are complex (real, imag)
+		return false;  // DFT coeffs are complex (real, imag)
 	dft->getDFTCoeffs(recordIndex, channel, coeffs);
 	return true;
 }

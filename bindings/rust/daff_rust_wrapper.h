@@ -111,4 +111,4 @@ DAFFRUST_API bool RustDAFF_ContentDFT_GetDFTCoeffs(RustDAFFContentHandle content
 }
 #endif
 
-#endif // IW_DAFF_RUST_WRAPPER
+#endif  // IW_DAFF_RUST_WRAPPER
