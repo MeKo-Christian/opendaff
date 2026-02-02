@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 2.8.9 )
+cmake_minimum_required( VERSION 3.10 )
 
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 
@@ -9,7 +9,7 @@ find_package( SndFile QUIET )
 find_package( Matlab QUIET )
 find_package( Qt5 COMPONENTS Core Widgets Gui Sql Svg QUIET )
 find_package( VTK QUIET )
-find_package( doxygen QUIET )
+find_package( Doxygen QUIET )
 
 
 if( NOT DEFINED OPENDAFF_BUILD_DAFFLIBS_SHARED )

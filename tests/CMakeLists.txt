@@ -1,9 +1,22 @@
-add_subdirectory( "daffviztest" )
-add_subdirectory( "qttest" )
-add_subdirectory( "tryout" )
+# Core tests (no dependencies)
 add_subdirectory( "verification" )
-add_subdirectory( "qtvtktest" )
-add_subdirectory( "vtktest" )
-add_subdirectory( "vtkdaffircarpet" )
-add_subdirectory( "qtdaffviztest" )
 add_subdirectory( "deserializertest" )
+add_subdirectory( "tryout" )
+
+# VTK-dependent tests
+if( VTK_FOUND )
+	add_subdirectory( "vtktest" )
+	add_subdirectory( "vtkdaffircarpet" )
+endif()
+
+# DAFFViz-dependent tests (requires both VTK and Qt)
+if( OPENDAFF_WITH_DAFFVIZ )
+	add_subdirectory( "daffviztest" )
+	add_subdirectory( "qtdaffviztest" )
+endif()
+
+# Qt-dependent tests
+if( Qt5_FOUND )
+	add_subdirectory( "qttest" )
+	add_subdirectory( "qtvtktest" )
+endif()

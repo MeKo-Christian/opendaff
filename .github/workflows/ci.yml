@@ -14,12 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install treefmt
-        run: |
-          curl -L https://github.com/numtide/treefmt/releases/latest/download/treefmt-x86_64-unknown-linux-musl -o treefmt
-          chmod +x treefmt
-          sudo mv treefmt /usr/local/bin/
-
       - name: Install formatters
         run: |
           # clang-format for C/C++
@@ -34,6 +28,13 @@ jobs:
 
           # prettier for markdown/yaml/json
           npm install -g prettier
+
+      - name: Install treefmt
+        uses: jaxxstorm/action-install-gh-release@v1
+        with:
+          repo: numtide/treefmt
+          tag: latest
+          chmod: 0755
 
       - name: Check formatting
         run: treefmt --fail-on-change

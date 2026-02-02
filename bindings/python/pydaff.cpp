@@ -56,13 +56,12 @@ bool ValidHandle(const int iHandle)
 		return true;
 }
 
-static PyObject* daff_open(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyObject* pKeywordNames)
+static PyObject* daff_open(PyObject*, PyObject* args, PyObject* kwargs)
 {
-	static const char* const _keywords[] = {"open", NULL};
-	static _PyArg_Parser _parser = {"s:open", _keywords, 0};
+	static const char* const keywords[] = {"open", NULL};
 	char* pcFilePath = nullptr;
 
-	if (!_PyArg_ParseStack(ppArgs, nArgs, pKeywordNames, &_parser, &pcFilePath))
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "s:open", const_cast<char**>(keywords), &pcFilePath))
 		return NULL;
 
 	std::string sFilePath(pcFilePath);
@@ -80,13 +79,12 @@ static PyObject* daff_open(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyObj
 	return NULL;
 }
 
-static PyObject* daff_close(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyObject* pKeywordNames)
+static PyObject* daff_close(PyObject*, PyObject* args, PyObject* kwargs)
 {
-	static const char* const _keywords[] = {"close", NULL};
-	static _PyArg_Parser _parser = {"i:close", _keywords, 0};
+	static const char* const keywords[] = {"close", NULL};
 	int iHandle = -1;
 
-	if (!_PyArg_ParseStack(ppArgs, nArgs, pKeywordNames, &_parser, &iHandle))
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i:close", const_cast<char**>(keywords), &iHandle))
 		return NULL;
 
 	if (!ValidHandle(iHandle)) {
@@ -100,18 +98,17 @@ static PyObject* daff_close(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyOb
 	}
 }
 
-static PyObject* daff_nearest_neighbour_index(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyObject* pKeywordNames)
+static PyObject* daff_nearest_neighbour_index(PyObject*, PyObject* args, PyObject* kwargs)
 {
 	// Get the index of the nearest neighbour
-	static const char* const _keywords[] = {"index", "view", "angle1", "angle2", NULL};
-	static _PyArg_Parser _parser = {"iidd:nearest_neighbour_index", _keywords, 0};
+	static const char* const keywords[] = {"index", "view", "angle1", "angle2", NULL};
 	int iHandle = -1;
 	int iView;
 	double dAngle1Deg;
 	double dAngle2Deg;
 
 
-	if (!_PyArg_ParseStack(ppArgs, nArgs, pKeywordNames, &_parser, &iHandle, &iView, &dAngle1Deg, &dAngle2Deg))
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iidd:nearest_neighbour_index", const_cast<char**>(keywords), &iHandle, &iView, &dAngle1Deg, &dAngle2Deg))
 		return NULL;
 
 	if (!ValidHandle(iHandle)) {
@@ -137,11 +134,10 @@ static PyObject* daff_nearest_neighbour_index(PyObject*, PyObject** ppArgs, Py_s
 	return Py_None;
 }
 
-static PyObject* daff_nearest_neighbour_record(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyObject* pKeywordNames)
+static PyObject* daff_nearest_neighbour_record(PyObject*, PyObject* args, PyObject* kwargs)
 {
 	// Get the record of the nearest neighbour
-	static const char* const _keywords[] = {"index", "view", "angle1", "angle2", NULL};
-	static _PyArg_Parser _parser = {"iidd:nearest_neighbour_record", _keywords, 0};
+	static const char* const keywords[] = {"index", "view", "angle1", "angle2", NULL};
 	int iHandle = -1;
 	int iView;
 	double dAngle1Deg;
@@ -150,7 +146,7 @@ static PyObject* daff_nearest_neighbour_record(PyObject*, PyObject** ppArgs, Py_
 	// Initialize a new list
 	PyObject* record = PyList_New(0);
 
-	if (!_PyArg_ParseStack(ppArgs, nArgs, pKeywordNames, &_parser, &iHandle, &iView, &dAngle1Deg, &dAngle2Deg))
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iidd:nearest_neighbour_record", const_cast<char**>(keywords), &iHandle, &iView, &dAngle1Deg, &dAngle2Deg))
 		return NULL;
 
 	if (!ValidHandle(iHandle)) {
@@ -171,11 +167,10 @@ static PyObject* daff_nearest_neighbour_record(PyObject*, PyObject** ppArgs, Py_
 	return record;
 }
 
-static PyObject* daff_record(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyObject* pKeywordNames)
+static PyObject* daff_record(PyObject*, PyObject* args, PyObject* kwargs)
 {
 	// Get the record of the given record index
-	static const char* const _keywords[] = {"index", "recordIndex", NULL};
-	static _PyArg_Parser _parser = {"ii:record", _keywords, 0};
+	static const char* const keywords[] = {"index", "recordIndex", NULL};
 	int iHandle = -1;
 	int iRecordIndex;
 
@@ -183,7 +178,7 @@ static PyObject* daff_record(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyO
 	// Initialize a new list
 	PyObject* record = PyList_New(0);
 
-	if (!_PyArg_ParseStack(ppArgs, nArgs, pKeywordNames, &_parser, &iHandle, &iRecordIndex))
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:record", const_cast<char**>(keywords), &iHandle, &iRecordIndex))
 		return NULL;
 
 	if (!ValidHandle(iHandle)) {
@@ -356,13 +351,12 @@ static void GetRecordPython(DAFFReader* pReader, int iRecordIndex, PyObject*& li
 }
 
 
-static PyObject* daff_content_type(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyObject* pKeywordNames)
+static PyObject* daff_content_type(PyObject*, PyObject* args, PyObject* kwargs)
 {
-	static const char* const _keywords[] = {"index", NULL};
-	static _PyArg_Parser _parser = {"i:content_type", _keywords, 0};
+	static const char* const keywords[] = {"index", NULL};
 	int iHandle = -1;
 
-	if (!_PyArg_ParseStack(ppArgs, nArgs, pKeywordNames, &_parser, &iHandle))
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i:content_type", const_cast<char**>(keywords), &iHandle))
 		return NULL;
 
 	if (!ValidHandle(iHandle)) {
@@ -375,13 +369,12 @@ static PyObject* daff_content_type(PyObject*, PyObject** ppArgs, Py_ssize_t nArg
 	}
 }
 
-static PyObject* daff_content_type_str(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyObject* pKeywordNames)
+static PyObject* daff_content_type_str(PyObject*, PyObject* args, PyObject* kwargs)
 {
-	static const char* const _keywords[] = {"index", NULL};
-	static _PyArg_Parser _parser = {"i:content_type_str", _keywords, 0};
+	static const char* const keywords[] = {"index", NULL};
 	int iHandle = -1;
 
-	if (!_PyArg_ParseStack(ppArgs, nArgs, pKeywordNames, &_parser, &iHandle))
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i:content_type_str", const_cast<char**>(keywords), &iHandle))
 		return NULL;
 
 	if (!ValidHandle(iHandle)) {

@@ -54,7 +54,11 @@ OpenDAFF comprises ...
 2. two PC applications
    - _DAFFTool_: a command line tool to investigate file contents (metadata) and extract directional data
    - _DAFFViewer_: a graphical application to visualize DAFF directivities, show metadata and extract directional data
-3. a binding interface to the C++ library for Matlab (a Matlab executable) to read DAFF files
+3. language bindings for the C++ library
+   - _Matlab_: Matlab executable (mex) to read DAFF files
+   - _Python_: Python C extension module with Pythonic wrapper
+   - _C#_: C wrapper DLL with C# class interface
+   - _Go_: CGO bindings with idiomatic Go API
 4. a collection of Matlab scripts to generate or assemble DAFF content
 5. some tests for validation.
 
@@ -130,6 +134,36 @@ You can now activate the switch OPENDAFF*BUILD_DAFFVIZ to generate the DAFF visu
 If you want to build the applications, namely the DAFFViewer and the DAFFTool, you will have to resolve further third party dependencies, as stated above. You can find Windows binary packages on the websites of the projects. Again, tell CMake where to find the packages inside the CMake GUI window.
 You can then activate the switches for the applications. Configure, Generate. Your Visual Studio project will now include the applications.
 
-### Matlab binding
+### Language bindings
 
-To generate the Matlab executable (mex) binary, it is easiest to use your preferred compiler within Matlab. You can execute the build*Matlab_DAFF.m script in bindings/matlab, which will generate a \_DAFF* mex file.
+#### Matlab binding
+
+To generate the Matlab executable (mex) binary, it is easiest to use your preferred compiler within Matlab. You can execute the build_Matlab_DAFF.m script in bindings/matlab, which will generate a _DAFF_ mex file.
+
+#### Python binding
+
+Python bindings are provided in `bindings/python/`. Build with:
+
+```sh
+cd bindings/python
+python setup.py build
+python setup.py install
+```
+
+#### C# binding
+
+C# bindings include a C wrapper DLL and C# class. Enable with `OPENDAFF_WITH_CSHARP_BINDING=ON` in CMake.
+
+#### Go binding
+
+Go bindings use CGO to interface with the C++ library through a C wrapper. Build with:
+
+```sh
+just build-go
+# Or manually
+cmake -DOPENDAFF_WITH_GO_BINDING=ON .
+make
+cd bindings/go && go build
+```
+
+For detailed Go documentation, see [bindings/go/README.md](bindings/go/README.md).
