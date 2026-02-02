@@ -15,8 +15,8 @@ if( OPENDAFF_WITH_DAFFVIZ )
 	add_subdirectory( "qtdaffviztest" )
 endif()
 
-# Qt-dependent tests
-if( Qt5_FOUND )
+# Qt+VTK-dependent tests
+if( Qt5_FOUND AND VTK_FOUND )
 	add_subdirectory( "qttest" )
 	add_subdirectory( "qtvtktest" )
 endif()
