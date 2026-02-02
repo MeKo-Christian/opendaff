@@ -1,10 +1,12 @@
 # OpenDAFF - A free, open source software package for directional audio data
 
+> **Note:** This is a fork of the original OpenDAFF repository maintained by the Institute of Technical Acoustics (ITA) at RWTH Aachen University. The original repository can be found at: [https://git.rwth-aachen.de/ita/OpenDAFF](https://git.rwth-aachen.de/ita/OpenDAFF)
+
 OpenDAFF is a free and open source software package for directional audio content like directivities of sound sources (e.g. loudspeakers, musical instruments) and sound receivers (e.g. microphones, head-related transfer functions, HRIRs/HRTFs).
 OpenDAFF enables a simple exchange, representation and efficient storage of such directional representations in form of a single DAFF file (\*.DAFF).
 Under the term software package, OpenDAFF unites the DAFF file format conventions, a C++ software library for reading DAFF files, a C++ visualization library using VTK and QtWidgets and extensive Matlab scripts for writing DAFF files.
 The package is complemented by tools like a graphical viewer application (called DAFFViewer) and a command-line utility (called DAFFTool).
-Visit the OpenDAFF homepage: http://www.opendaff.org
+Visit the OpenDAFF homepage: [http://www.opendaff.org](http://www.opendaff.org)
 
 ## License
 
@@ -26,12 +28,14 @@ You should also have received a [copy of the License](LICENSE.md) with the OpenD
 
 ## Quick build guide for Linux developers
 
-OpenDAFF uses CMake to generate project files for your desired development environment and platform. Install a current version of CMake according to the information found on http://www.cmake.org
+OpenDAFF uses CMake to generate project files for your desired development environment and platform. Install a current version of CMake according to the information found on [http://www.cmake.org](http://www.cmake.org)
 In the source folder of OpenDAFF that contains the CMakeLists.txt, run
 
+´´´sh
 cmake .
 make
 make install
+´´´
 
 Now, a copy of the OpenDAFF static library _DAFF_ has been installed on your system. To activate further optional parts of OpenDAFF, see the OPENDAFF\_\* switches within the CMake configuration.
 
@@ -51,7 +55,9 @@ OpenDAFF comprises ...
 
 ## OpenDAFF dependencies
 
-There is no dependency required for the DAFF library itself, however the additional visualization library DAFFViz and the provided applications require third party projects. To build the entire OpenDAFF project, the following is required:
+There is no dependency required for the DAFF library itself, however the additional visualization library
+DAFFViz and the provided applications require third party projects. To build the entire OpenDAFF project,
+the following is required:
 
 - FFTW3
 - SNDFILE
@@ -93,7 +99,8 @@ The DAFFViewer also requires the Qt and VTK.
 
 ### Prerequisites
 
-OpenDAFF uses CMake to generate project files for your desired development environment and platform. Install a current version of CMake according to the information found on http://www.cmake.org
+OpenDAFF uses CMake to generate project files for your desired development environment and platform.
+Install a current version of CMake according to the information found on [http://www.cmake.org](http://www.cmake.org)
 
 Let's assume you have donwloaded the source code of OpenDAFF to the folder _D:/dev/OpenDAFF_ and this README along with a file named CMakeLists.txt can be found here.
 
