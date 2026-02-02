@@ -130,6 +130,7 @@ jobs:
             libsndfile1-dev \
             qtbase5-dev \
             qttools5-dev \
+            libqt5svg5-dev \
             libvtk9-dev
 
       - name: Install dependencies (macOS)
@@ -255,6 +256,7 @@ jobs:
             libsndfile1-dev \
             qtbase5-dev \
             qttools5-dev \
+            libqt5svg5-dev \
             libvtk9-dev
 
       - name: Configure with all applications
