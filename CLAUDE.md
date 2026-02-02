@@ -74,6 +74,7 @@ Enable optional components via CMake switches (prefix: `OPENDAFF_*`):
 - `OPENDAFF_WITH_CSHARP_BINDING`: Build C# wrapper and bindings
 - `OPENDAFF_WITH_PYTHON_BINDING`: Build Python C extension
 - `OPENDAFF_WITH_GO_BINDING`: Build Go wrapper and bindings
+- `OPENDAFF_WITH_RUST_BINDING`: Build Rust wrapper and bindings
 - `OPENDAFF_BUILD_DAFF_DOCUMENTATION`: Generate Doxygen docs
 
 **Just commands for specific builds:**
@@ -85,6 +86,7 @@ just build-viewer     # Build DAFFViewer
 just build-tests      # Build tests
 just build-python     # Build Python bindings
 just build-go         # Build Go bindings
+just build-rust       # Build Rust bindings
 just build-matlab     # Build Matlab bindings (requires Matlab)
 just build-docs       # Generate documentation
 ```
@@ -202,6 +204,15 @@ DAFF supports five content types (see [FILEFORMAT.md](FILEFORMAT.md)):
 - Idiomatic Go API with proper error handling
 - Example: [bindings/go/daff_test.go](bindings/go/daff_test.go)
 - Full documentation: [bindings/go/README.md](bindings/go/README.md)
+
+**Rust:** [bindings/rust/](bindings/rust/)
+
+- Build: `just build-rust` or manually with CMake + `cargo build --release`
+- Uses FFI to call C wrapper around C++ library
+- Idiomatic Rust API with Result-based error handling
+- Memory safe with RAII (Drop trait)
+- Example: [bindings/rust/examples/basic_usage.rs](bindings/rust/examples/basic_usage.rs)
+- Full documentation: [bindings/rust/README.md](bindings/rust/README.md)
 
 ## Testing
 

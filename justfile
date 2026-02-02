@@ -157,6 +157,36 @@ install-go:
 fmt-go:
     cd bindings/go && gofmt -w .
 
+# Build Rust bindings (C wrapper via CMake + Cargo)
+build-rust BUILD_DIR="build-rust":
+    cmake -B {{ BUILD_DIR }} -S . -DOPENDAFF_WITH_RUST_BINDING=ON
+    @just build {{ BUILD_DIR }}
+    cd bindings/rust && cargo build --release
+
+# Test Rust bindings
+test-rust:
+    cd bindings/rust && cargo test
+
+# Install Rust crate locally
+install-rust:
+    cd bindings/rust && cargo install --path .
+
+# Format Rust code
+fmt-rust:
+    cd bindings/rust && cargo fmt
+
+# Run Rust clippy linter
+clippy-rust:
+    cd bindings/rust && cargo clippy
+
+# Generate Rust documentation
+docs-rust:
+    cd bindings/rust && cargo doc --open
+
+# Build Rust example
+example-rust EXAMPLE="basic_usage":
+    cd bindings/rust && cargo run --example {{ EXAMPLE }}
+
 # Build Matlab bindings (requires Matlab with mex compiler)
 build-matlab:
     #!/usr/bin/env bash

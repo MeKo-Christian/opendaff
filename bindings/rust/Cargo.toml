@@ -1,0 +1,30 @@
+[package]
+name = "opendaff"
+version = "1.8.0"
+authors = ["Institute of Technical Acoustics (ITA), RWTH Aachen University"]
+edition = "2021"
+rust-version = "1.70"
+description = "Rust bindings for OpenDAFF - directional audio data library"
+documentation = "https://docs.rs/opendaff"
+homepage = "https://www.opendaff.org"
+repository = "https://github.com/MeKo-Tech/opendaff"
+license = "Apache-2.0"
+keywords = ["audio", "directional", "hrtf", "acoustics", "daff"]
+categories = ["multimedia::audio", "multimedia", "science"]
+readme = "README.md"
+
+[lib]
+name = "opendaff"
+path = "src/lib.rs"
+
+[dependencies]
+
+[build-dependencies]
+
+[dev-dependencies]
+
+[features]
+default = []
+
+[package.metadata.docs.rs]
+rustdoc-args = ["--cfg", "docsrs"]

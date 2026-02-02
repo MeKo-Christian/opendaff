@@ -52,6 +52,10 @@ if( NOT DEFINED OPENDAFF_WITH_GO_BINDING )
 	set( OPENDAFF_WITH_GO_BINDING OFF CACHE BOOL "Build OpenDAFF Go binding (includes a C wrapper library for CGO)" )
 endif( )
 
+if( NOT DEFINED OPENDAFF_WITH_RUST_BINDING )
+	set( OPENDAFF_WITH_RUST_BINDING OFF CACHE BOOL "Build OpenDAFF Rust binding (includes a C wrapper library for FFI)" )
+endif( )
+
 if( FFTW_FOUND )
 	include_directories( "${FFTW_INCLUDE_DIR}" )
 endif( )
@@ -147,7 +151,7 @@ else( )
 	set_property( TARGET DAFF PROPERTY FOLDER "DAFFLibs" )
 
 	# Enable PIC for static library when it will be linked into shared libraries (bindings)
-	if( OPENDAFF_WITH_GO_BINDING OR OPENDAFF_WITH_PYTHON_BINDING OR OPENDAFF_WITH_CSHARP_BINDING )
+	if( OPENDAFF_WITH_GO_BINDING OR OPENDAFF_WITH_RUST_BINDING OR OPENDAFF_WITH_PYTHON_BINDING OR OPENDAFF_WITH_CSHARP_BINDING )
 		set_property( TARGET DAFF PROPERTY POSITION_INDEPENDENT_CODE ON )
 	endif( )
 
@@ -304,6 +308,17 @@ if( OPENDAFF_WITH_GO_BINDING )
 	install( FILES "bindings/go/go.mod" DESTINATION "go" )
 	install( FILES "bindings/go/daff.go" DESTINATION "go" )
 	install( FILES "bindings/go/daff_test.go" DESTINATION "go" )
+
+endif( )
+
+if( OPENDAFF_WITH_RUST_BINDING )
+
+	add_subdirectory( "bindings/rust" )
+	install( FILES "bindings/rust/README.md" DESTINATION "rust" )
+	install( FILES "bindings/rust/Cargo.toml" DESTINATION "rust" )
+	install( FILES "bindings/rust/build.rs" DESTINATION "rust" )
+	install( DIRECTORY "bindings/rust/src" DESTINATION "rust" )
+	install( DIRECTORY "bindings/rust/examples" DESTINATION "rust" )
 
 endif( )
 
