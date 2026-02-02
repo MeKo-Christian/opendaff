@@ -387,13 +387,12 @@ static PyObject* daff_content_type_str(PyObject*, PyObject* args, PyObject* kwar
 	}
 }
 
-static PyObject* daff_metadata(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyObject* pKeywordNames)
+static PyObject* daff_metadata(PyObject*, PyObject* args, PyObject* kwargs)
 {
-	static const char* const _keywords[] = {"index", NULL};
-	static _PyArg_Parser _parser = {"i:content_type_str", _keywords, 0};
+	static const char* const keywords[] = {"index", NULL};
 	int iHandle = -1;
 
-	if (!_PyArg_ParseStack(ppArgs, nArgs, pKeywordNames, &_parser, &iHandle)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i:metadata", const_cast<char**>(keywords), &iHandle)) {
 		PyErr_SetString(PyExc_KeyError, std::string("Wrong number of arguments").c_str());
 		return NULL;
 	}
@@ -416,7 +415,7 @@ static PyObject* daff_metadata(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, P
 		pMetadata->getKeys(vsKeys);
 
 
-		for each (std::string sKey in vsKeys) {
+		for (const std::string& sKey : vsKeys) {
 			// Current key as python object
 			PyObject* pyKey = PyUnicode_FromString(sKey.c_str());
 
@@ -452,13 +451,12 @@ static PyObject* daff_metadata(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, P
 	return Py_None;
 }
 
-static PyObject* daff_properties(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs, PyObject* pKeywordNames)
+static PyObject* daff_properties(PyObject*, PyObject* args, PyObject* kwargs)
 {
-	static const char* const _keywords[] = {"index", NULL};
-	static _PyArg_Parser _parser = {"i:content_type_str", _keywords, 0};
+	static const char* const keywords[] = {"index", NULL};
 	int iHandle = -1;
 
-	if (!_PyArg_ParseStack(ppArgs, nArgs, pKeywordNames, &_parser, &iHandle)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i:properties", const_cast<char**>(keywords), &iHandle)) {
 		PyErr_SetString(PyExc_KeyError, std::string("Wrong number of arguments").c_str());
 		return NULL;
 	}
@@ -625,15 +623,15 @@ static PyObject* daff_properties(PyObject*, PyObject** ppArgs, Py_ssize_t nArgs,
 // ------------------ module definitions ------------------ //
 
 static PyMethodDef daff_methods[] = {
-	{"open", (PyCFunction)daff_open, METH_FASTCALL, open_doc},
-	{"close", (PyCFunction)daff_close, METH_FASTCALL, no_doc},
-	{"nearest_neighbour_index", (PyCFunction)daff_nearest_neighbour_index, METH_FASTCALL, no_doc},
-	{"nearest_neighbour_record", (PyCFunction)daff_nearest_neighbour_record, METH_FASTCALL, no_doc},
-	{"record", (PyCFunction)daff_record, METH_FASTCALL, no_doc},
-	{"content_type", (PyCFunction)daff_content_type, METH_FASTCALL, no_doc},
-	{"content_type_str", (PyCFunction)daff_content_type_str, METH_FASTCALL, no_doc},
-	{"metadata", (PyCFunction)daff_metadata, METH_FASTCALL, no_doc},
-	{"properties", (PyCFunction)daff_properties, METH_FASTCALL, no_doc},
+	{"open", (PyCFunction)(void(*)(void))daff_open, METH_VARARGS | METH_KEYWORDS, open_doc},
+	{"close", (PyCFunction)(void(*)(void))daff_close, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"nearest_neighbour_index", (PyCFunction)(void(*)(void))daff_nearest_neighbour_index, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"nearest_neighbour_record", (PyCFunction)(void(*)(void))daff_nearest_neighbour_record, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"record", (PyCFunction)(void(*)(void))daff_record, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"content_type", (PyCFunction)(void(*)(void))daff_content_type, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"content_type_str", (PyCFunction)(void(*)(void))daff_content_type_str, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"metadata", (PyCFunction)(void(*)(void))daff_metadata, METH_VARARGS | METH_KEYWORDS, no_doc},
+	{"properties", (PyCFunction)(void(*)(void))daff_properties, METH_VARARGS | METH_KEYWORDS, no_doc},
 	{NULL, NULL, 0, NULL} /* Sentinel */
 };
 
