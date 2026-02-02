@@ -1,4 +1,3 @@
-
 # OpenDAFF - A free, open source software package for directional audio data
 
 ## License

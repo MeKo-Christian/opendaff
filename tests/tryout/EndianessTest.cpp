@@ -10,15 +10,17 @@
  */
 
 #include <iostream>
-#include "../../src/Utils.h"
+
 #include "../../src/Utils.cpp"
+#include "../../src/Utils.h"
 
 using namespace std;
 
-int main() {
+int main()
+{
 	// The number 1 as 32-bit in in little endian (LSB first)
 	char c[4] = {1, 0, 0, 0};
-	int& i = *(int*) c;
+	int& i = *(int*)c;
 	cout << "i before conversion = " << i << endl;
 	DAFF::le2se_4byte(&i, 1);
 	cout << "i after conversion = " << i << endl;

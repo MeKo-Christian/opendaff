@@ -12,58 +12,59 @@
 #ifndef IW_DAFFVIZQTTESTWINDOW
 #define IW_DAFFVIZQTTESTWINDOW
 
-#include <vtkSmartPointer.h> 
-#include <vtkCamera.h>
-#include "vtkContextView.h"
-#include "vtkContextScene.h"
-#include "vtkChartXY.h"
-#include "vtkPlot.h"
-#include "vtkTable.h"
-#include "vtkFloatArray.h"
-
-#include <QMainWindow>
-#include<DAFF.h>
+#include <DAFF.h>
 #include <DAFFReader.h>
-#include <vtkAssembly.h>
-#include <daffviz/DAFFVizSGNode.h>
+#include <daffviz/DAFFVizArrow.h>
 #include <daffviz/DAFFVizBalloonPlot.h>
 #include <daffviz/DAFFVizCarpetPlot.h>
-#include <daffviz/DAFFVizArrow.h>
+#include <daffviz/DAFFVizCartesianCoordinateAssistant.h>
 #include <daffviz/DAFFVizGrid.h>
 #include <daffviz/DAFFVizLabel.h>
 #include <daffviz/DAFFVizLine.h>
-#include <daffviz/DAFFVizCartesianCoordinateAssistant.h>
+#include <daffviz/DAFFVizSGNode.h>
 #include <daffviz/DAFFVizSphericalCoordinateAssistant.h>
+
+#include <QMainWindow>
+
+#include <vtkAssembly.h>
+#include <vtkCamera.h>
+#include <vtkSmartPointer.h>
+
+#include "vtkChartXY.h"
+#include "vtkContextScene.h"
+#include "vtkContextView.h"
+#include "vtkFloatArray.h"
+#include "vtkPlot.h"
+#include "vtkTable.h"
 
 namespace Ui {
 class DAFFVizQtWindow;
 }
 
-class DAFFVizQtWindow : public QMainWindow
-{
-    Q_OBJECT
+class DAFFVizQtWindow : public QMainWindow {
+	Q_OBJECT
 
 
-public:
-    explicit DAFFVizQtWindow(QWidget *parent = 0);
-    ~DAFFVizQtWindow();
+  public:
+	explicit DAFFVizQtWindow(QWidget* parent = 0);
+	~DAFFVizQtWindow();
 
-public slots:
+  public slots:
 
-private slots :
-void on_actionQuit_triggered();
-/*
-	void on_actionOpen_triggered();
-	//void on_lineEditFrequency_returnPressed();
-	//void on_lineEditPhi_returnPressed();
-	//void on_lineEditTheta_returnPressed();
-*/
-private:
-    Ui::DAFFVizQtWindow *ui;
-	DAFFReader *reader;
+  private slots:
+	void on_actionQuit_triggered();
+	/*
+		void on_actionOpen_triggered();
+		//void on_lineEditFrequency_returnPressed();
+		//void on_lineEditPhi_returnPressed();
+		//void on_lineEditTheta_returnPressed();
+	*/
+  private:
+	Ui::DAFFVizQtWindow* ui;
+	DAFFReader* reader;
 	DAFFViz::SGNode *node, *nodeCarpet;
 	vtkSmartPointer<vtkRenderer> renderer, rendererPlot;
-	vtkCamera *camera;
+	vtkCamera* camera;
 	vtkSmartPointer<vtkContextView> view;
 	vtkSmartPointer<vtkTable> table;
 	vtkSmartPointer<vtkFloatArray> dataX, dataY;
@@ -72,13 +73,13 @@ private:
 
 	DAFFViz::SphericalCoordinateAssistant* spherical;
 	DAFFViz::CartesianCoordinateAssistant* cartesian;
-	DAFFViz::Arrow* balloonUpArrow, *balloonFrontArrow, *carpetXArrow, *carpetYArrow, *carpetZArrow;
-	DAFFViz::Grid *grid;
-	DAFFViz::Label *label;
-	DAFFViz::Line *line;
-	DAFFViz::BalloonPlot *balloonPlot;
-	DAFFViz::CarpetPlot *carpetPlot;
+	DAFFViz::Arrow *balloonUpArrow, *balloonFrontArrow, *carpetXArrow, *carpetYArrow, *carpetZArrow;
+	DAFFViz::Grid* grid;
+	DAFFViz::Label* label;
+	DAFFViz::Line* line;
+	DAFFViz::BalloonPlot* balloonPlot;
+	DAFFViz::CarpetPlot* carpetPlot;
 	void drawGraph();
 };
 
-#endif // IW_DAFFVIZQTTESTWINDOW
+#endif  // IW_DAFFVIZQTTESTWINDOW

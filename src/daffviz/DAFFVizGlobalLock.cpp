@@ -2,30 +2,22 @@
 
 #include <mutex>
 
-namespace DAFFViz
+namespace DAFFViz {
+
+class GlobalLockImpl : public GlobalLock {
+  public:
+	inline void lock() { m_mutex.lock(); };
+
+	inline void unlock() { m_mutex.unlock(); };
+
+  private:
+	std::mutex m_mutex;
+};
+
+GlobalLockImpl g_oGlobalLock;
+
+GlobalLock* GlobalLock::getInstance()
 {
-
-	class GlobalLockImpl : public GlobalLock
-	{
-	public:
-		inline void lock() 
-		{ 
-			m_mutex.lock();
-		};
-
-		inline void unlock()
-		{ 
-			m_mutex.unlock();
-		};
-
-	private:
-		std::mutex m_mutex;
-	};
-
-	GlobalLockImpl g_oGlobalLock;
-
-	GlobalLock* GlobalLock::getInstance()
-	{ 
-		return &g_oGlobalLock;
-	};
-} // End of namespace "DAFFViz"
+	return &g_oGlobalLock;
+};
+}  // namespace DAFFViz

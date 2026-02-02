@@ -13,25 +13,25 @@
 #define IW_DAFF_METADATAIMPL
 
 #include <DAFFMetadata.h>
+
 #include <map>
 
 // Forward declarations
 class DAFFMetadataKey;
 
-class DAFFMetadataImpl : public DAFFMetadata
-{
-public:
+class DAFFMetadataImpl : public DAFFMetadata {
+  public:
 	DAFFMetadataImpl();
 	~DAFFMetadataImpl();
 
 	// Load data from a buffer
-	int load( void* pData, size_t &iBytesRead );
+	int load(void* pData, size_t& iBytesRead);
 
 	// --= Implementation of the interface "DAFFMetadata" =--
 
 	bool isEmpty() const;
 	bool hasKey(const std::string& sKey) const;
-	void getKeys(std::vector< std::string >& vsKeyList) const;
+	void getKeys(std::vector<std::string>& vsKeyList) const;
 	int getKeyType(const std::string& sKey) const;
 	std::string getKeyString(const std::string& sKey) const;
 	bool getKeyBool(const std::string& sKey) const;
@@ -40,7 +40,7 @@ public:
 
 	std::string toString() const;
 
-private:
+  private:
 	typedef std::pair<std::string, DAFFMetadataKey*> KeyPair;
 	typedef std::map<std::string, DAFFMetadataKey*> KeyMap;
 	typedef std::map<std::string, DAFFMetadataKey*>::const_iterator KeyMapConstIterator;
@@ -57,4 +57,4 @@ private:
 	static void deleteMetadataKeyPair(const KeyPair& pKeyPair);
 };
 
-#endif // IW_DAFF_METADATAIMPL
+#endif  // IW_DAFF_METADATAIMPL

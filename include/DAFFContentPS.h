@@ -12,8 +12,9 @@
 #ifndef IW_DAFF_CONTENTPS
 #define IW_DAFF_CONTENTPS
 
-#include <DAFFDefs.h>
 #include <DAFFContent.h>
+#include <DAFFDefs.h>
+
 #include <vector>
 
 //! Phase spectrum content interface
@@ -28,28 +29,27 @@
  * The phase coefficients can be retrieved using the method getPhases.
  */
 
-class DAFF_API DAFFContentPS: public DAFFContent
-{
-public:
+class DAFF_API DAFFContentPS : public DAFFContent {
+  public:
 	inline virtual ~DAFFContentPS() {};
 
 	//! Returns the number of support points (frequencies)
 	/*
-	* @return Number of frequencies
-	*/
-	virtual int getNumFrequencies() const=0;
+	 * @return Number of frequencies
+	 */
+	virtual int getNumFrequencies() const = 0;
 
 	//! Retrieves the frequencies [in Hertz] at which values are defined
 	/*
 	 * @return Vector of frequencies
 	 */
-	virtual const std::vector<float>& getFrequencies() const=0;
+	virtual const std::vector<float>& getFrequencies() const = 0;
 
 	// --= Data access =--
 
 	//! Retrieves phase coefficients
 	/**
-     * This method retrives the phase coefficients for the given direction (record index)
+	 * This method retrives the phase coefficients for the given direction (record index)
 	 * and channel and stores them in the supplied destination buffer. The method writes exactly
 	 * as many coefficients as there are support frequencies. Their number can be determined
 	 * using the method getNumFrequencies.
@@ -60,7 +60,7 @@ public:
 	 *
 	 * @return #DAFF_NO_ERROR on success, another #DAFF_ERROR otherwise
 	 */
-	virtual int getPhases(int iRecordIndex, int iChannel, float* pfDest) const=0;
+	virtual int getPhases(int iRecordIndex, int iChannel, float* pfDest) const = 0;
 };
 
-#endif // IW_DAFF_CONTENTPS
+#endif  // IW_DAFF_CONTENTPS

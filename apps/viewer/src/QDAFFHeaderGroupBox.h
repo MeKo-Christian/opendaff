@@ -12,70 +12,59 @@
 #ifndef QDAFFHEADERGROUPBOX_H
 #define QDAFFHEADERGROUPBOX_H
 
-#include <QGroupBox>
-#include <QLineEdit>
-#include <QFileInfo>
-
 #include <DAFF.h>
 
+#include <QFileInfo>
+#include <QGroupBox>
+#include <QLineEdit>
 #include <iostream>
 
-class QDAFFHeaderGroupBox : public QGroupBox
-{
-    Q_OBJECT
+class QDAFFHeaderGroupBox : public QGroupBox {
+	Q_OBJECT
 
-public:
-    inline QDAFFHeaderGroupBox(QWidget *parent = Q_NULLPTR)
-        : QGroupBox(parent)
-    {
+  public:
+	inline QDAFFHeaderGroupBox(QWidget* parent = Q_NULLPTR) : QGroupBox(parent) {}
 
-    }
+	inline QDAFFHeaderGroupBox(const QString& title, QWidget* parent = Q_NULLPTR) : QGroupBox(title, parent) {}
 
-    inline QDAFFHeaderGroupBox(const QString &title, QWidget *parent = Q_NULLPTR)
-        : QGroupBox( title, parent) {}
-
-public slots:
+  public slots:
 	inline void CloseDAFF()
 	{
-		QLineEdit* pLE = this->findChild<QLineEdit*>( "lineEditFileName" );
-		if( pLE )
-		{
-			pLE->setText( "" );
-			pLE->setToolTip( "" );
+		QLineEdit* pLE = this->findChild<QLineEdit*>("lineEditFileName");
+		if (pLE) {
+			pLE->setText("");
+			pLE->setToolTip("");
 		}
 
-		pLE = this->findChild<QLineEdit*>( "lineEditVersion" );
-		if( pLE )
-			pLE->setText( "" );
+		pLE = this->findChild<QLineEdit*>("lineEditVersion");
+		if (pLE)
+			pLE->setText("");
 
-		pLE = this->findChild<QLineEdit*>( "lineEditContentType" );
-		if( pLE )
-		{
-			pLE->setText( "" );
-			pLE->setToolTip( "" );
+		pLE = this->findChild<QLineEdit*>("lineEditContentType");
+		if (pLE) {
+			pLE->setText("");
+			pLE->setToolTip("");
 		}
 	}
-    inline void ReadDAFF( const DAFFReader* pReader )
-    {
-       QLineEdit* pLE = this->findChild<QLineEdit*>( "lineEditFileName" );
-       if( pLE )
-       {
-           QFileInfo oFile( QString::fromStdString( pReader->getFilename() ) );
-           pLE->setText( oFile.fileName() );
-           pLE->setToolTip( oFile.absoluteFilePath() );
-       }
+	inline void ReadDAFF(const DAFFReader* pReader)
+	{
+		QLineEdit* pLE = this->findChild<QLineEdit*>("lineEditFileName");
+		if (pLE) {
+			QFileInfo oFile(QString::fromStdString(pReader->getFilename()));
+			pLE->setText(oFile.fileName());
+			pLE->setToolTip(oFile.absoluteFilePath());
+		}
 
-       pLE = this->findChild<QLineEdit*>( "lineEditVersion" );
-       if( pLE )
-           pLE->setText( QString::number( pReader->getFileFormatVersion() ) );
+		pLE = this->findChild<QLineEdit*>("lineEditVersion");
+		if (pLE)
+			pLE->setText(QString::number(pReader->getFileFormatVersion()));
 
-       pLE = this->findChild<QLineEdit*>( "lineEditContentType" );
-       if( pLE )
-       {
-		   pLE->setText( QString::fromStdString( DAFFUtils::StrContentType( pReader->getContentType() ) ) );
-           pLE->setToolTip( QString::fromStdString( DAFFUtils::StrShortContentType( pReader->getContentType() ) ) );
-       }
-    }
+		pLE = this->findChild<QLineEdit*>("lineEditContentType");
+		if (pLE) {
+			pLE->setText(QString::fromStdString(DAFFUtils::StrContentType(pReader->getContentType())));
+			pLE->setToolTip(QString::fromStdString(DAFFUtils::StrShortContentType(pReader->getContentType())));
+		}
+	}
 };
 
-#endif // QDAFFHEADERGROUPBOX_H
+#endif  // QDAFFHEADERGROUPBOX_H

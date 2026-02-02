@@ -12,6 +12,7 @@
 #define IW_DAFF_READER
 
 #include <DAFFDefs.h>
+
 #include <string>
 
 // Forward declarations
@@ -113,9 +114,8 @@ class DAFFProperties;
  *
  */
 
-class DAFF_API DAFFReader
-{
-public:
+class DAFF_API DAFFReader {
+  public:
 	//! Factory method
 	/**
 	 * This method must be used to create reader instances
@@ -138,11 +138,11 @@ public:
 	 *
 	 * @return #DAFF_NO_ERROR on success, another #DAFF_ERROR otherwise
 	 */
-	virtual int openFile( const std::string& sFilePath ) = 0;
+	virtual int openFile(const std::string& sFilePath) = 0;
 
 	//! Closes an opened DAFF file
 	/**
-	 * 
+	 *
 	 */
 	virtual void closeFile() = 0;
 
@@ -153,9 +153,9 @@ public:
 	// --= Serialization methods =--
 
 	//! Deserializes DAFF content from a byte buffer
-	virtual int deserialize( char* pDAFFDataBuffer ) = 0;
+	virtual int deserialize(char* pDAFFDataBuffer) = 0;
 
-	virtual bool isValid() const=0;
+	virtual bool isValid() const = 0;
 
 
 	// --= Properties =--
@@ -182,4 +182,4 @@ public:
 	virtual std::string toString() const = 0;
 };
 
-#endif // IW_DAFF_READER
+#endif  // IW_DAFF_READER

@@ -1,0 +1,420 @@
+# OpenDAFF .gitignore
+# Covers C++, CMake, Python, Matlab, C#, and build artifacts
+
+# =============================================================================
+# Build Directories
+# =============================================================================
+build/
+build-*/
+dist/
+bin/
+lib/
+out/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+_deps/
+*.cmake.in
+
+# =============================================================================
+# C/C++ Artifacts
+# =============================================================================
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.so.*
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+DAFFTool
+DAFFViewer
+
+# =============================================================================
+# Python
+# =============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# =============================================================================
+# Matlab
+# =============================================================================
+
+# Matlab autosave files
+*.asv
+*.m~
+
+# Matlab compiled files
+*.mex*
+*.p
+
+# Matlab profiler output
+profile_results/
+
+# Simulink autosave
+*.autosave
+*.slxc
+
+# =============================================================================
+# C# / .NET
+# =============================================================================
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.user.proto
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# Visual Studio cache/options directory
+.vs/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NUnit
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+**/packages/*
+
+# =============================================================================
+# IDEs and Editors
+# =============================================================================
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs (CLion, PyCharm, IntelliJ, etc.)
+.idea/
+*.iml
+*.ipr
+*.iws
+cmake-build-*/
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+
+# Qt Creator
+*.pro.user
+*.pro.user.*
+*.qbs.user
+*.qbs.user.*
+*.moc
+moc_*.cpp
+moc_*.h
+ui_*.h
+qrc_*.cpp
+
+# Eclipse
+.cproject
+.project
+.settings/
+
+# Vim
+*.swp
+*.swo
+*~
+.*.sw[a-z]
+*.un~
+Session.vim
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# =============================================================================
+# Documentation
+# =============================================================================
+
+# Doxygen output
+doc/html/
+doc/latex/
+doc/xml/
+docs/_build/
+docs/.doctrees/
+
+# =============================================================================
+# Operating System
+# =============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+
+# =============================================================================
+# Version Control
+# =============================================================================
+
+# Git
+*.orig
+*.rej
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+
+# =============================================================================
+# Temporary Files
+# =============================================================================
+
+# Core dumps
+core
+core.*
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.log
+*.tlog
+
+# =============================================================================
+# Project Specific
+# =============================================================================
+
+# DAFF files (binary data - usually large)
+*.daff
+*.DAFF
+
+# But keep example/test DAFF files if they exist
+!content/*.daff
+!testdata/**/*.daff
+!tests/**/*.daff
+
+# Extracted resources from testing
+extracted/
+
+# Coverage reports
+coverage.out
+coverage.html
+
+# Test results
+test-results/
+TestResults/
+
+# Performance profiling
+*.prof
+*.perf
+
+# =============================================================================
+# Dependencies
+# =============================================================================
+
+# vcpkg (if used)
+vcpkg_installed/
+
+# Conan (if used)
+conaninfo.txt
+conanbuildinfo.*
+conan.lock
+
+# =============================================================================
+# Formatting and Linting
+# =============================================================================
+
+# clang-format backup files
+*.formatted
+
+# clang-tidy fixes
+*.tidy
+
+# =============================================================================
+# Backup and Archive
+# =============================================================================
+
+*.zip
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# =============================================================================
+# Custom Build Outputs
+# =============================================================================
+
+# Installation directories
+install/
+prefix/
+
+# Package staging
+staging/
+package/
+
+# Generated version files
+*_version.h
+version.txt
+
+# =============================================================================
+# Security
+# =============================================================================
+
+# Private keys and certificates
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
+
+# Environment variables and secrets
+.env
+.env.*
+secrets.json
+credentials.json
+
+# =============================================================================
+# Miscellaneous
+# =============================================================================
+
+# Node modules (if using npm for tooling)
+node_modules/
+
+# Treefmt cache
+.treefmt-cache/
+
+# Just command runner
+.just/

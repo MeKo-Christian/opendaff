@@ -12,8 +12,9 @@
 #ifndef IW_DAFF_CONTENTDFT
 #define IW_DAFF_CONTENTDFT
 
-#include <DAFFDefs.h>
 #include <DAFFContent.h>
+#include <DAFFDefs.h>
+
 #include <vector>
 
 //! Discrete Fourier spectrum content interface
@@ -28,9 +29,8 @@
  * The magnitude coefficients can be retrieved using the method getDFTCoeffs().
  */
 
-class DAFF_API DAFFContentDFT: public DAFFContent
-{
-public:
+class DAFF_API DAFFContentDFT : public DAFFContent {
+  public:
 	inline virtual ~DAFFContentDFT() {};
 
 	//! Returns the size of the transform (number of overall DFT coefficients)
@@ -40,7 +40,7 @@ public:
 	 *
 	 * @return DFT transform size
 	 */
-	virtual int getTransformSize() const=0;
+	virtual int getTransformSize() const = 0;
 
 	//! Returns the number of DFT coefficients
 	/**
@@ -52,25 +52,25 @@ public:
 	 *
 	 * @return Number of DFT coefficients
 	 */
-	virtual int getNumDFTCoeffs() const=0;
+	virtual int getNumDFTCoeffs() const = 0;
 
 	//! Returns whether the spectrum is complex-conjugated symmetric
 	/**
-	  * @return True, if the DFT spectrum is complex-conjugated symmetric
-	  */
-	virtual bool isSymmetric() const=0;
+	 * @return True, if the DFT spectrum is complex-conjugated symmetric
+	 */
+	virtual bool isSymmetric() const = 0;
 
 	//! Returns the correspondig sampling rate [in Hertz]
 	/**
-	* @return Sampling rate in Hertz
-	*/
-	virtual double getSamplerate() const=0;
+	 * @return Sampling rate in Hertz
+	 */
+	virtual double getSamplerate() const = 0;
 
 	//! Returns the frequency resolution [in Hertz]
 	/**
-	* @return Linear frequency spacing in Hertz
-	*/
-	virtual double getFrequencyBandwidth() const=0;
+	 * @return Linear frequency spacing in Hertz
+	 */
+	virtual double getFrequencyBandwidth() const = 0;
 
 	//! Returns the overall greatest magnitude value
 	/**
@@ -79,13 +79,13 @@ public:
 	 *
 	 * @return Absolute maximum magnitude value
 	 */
-	virtual float getOverallMagnitudeMaximum() const=0;
+	virtual float getOverallMagnitudeMaximum() const = 0;
 
 	// --= Data access =--
 
 	//! Retrieve a single magnitude coefficient
 	/**
-     * This method retrives a single complex-valued DFT coefficient for the given direction (record index)
+	 * This method retrives a single complex-valued DFT coefficient for the given direction (record index)
 	 * and channel and stores them in the supplied destination variable.
 	 *
 	 * @param [in] iRecordIndex Record index (direction)
@@ -96,11 +96,11 @@ public:
 	 *
 	 * @return #DAFF_NO_ERROR on success, another #DAFF_ERROR otherwise
 	 */
-	virtual int getDFTCoeff(int iRecordIndex, int iChannel, int iDFTCoeff, float& fReal, float& fImag) const=0;
+	virtual int getDFTCoeff(int iRecordIndex, int iChannel, int iDFTCoeff, float& fReal, float& fImag) const = 0;
 
 	//! Retrieves magnitude coefficients
 	/**
-     * This method retrives the complex-valued DFT coefficients for the given direction (record index)
+	 * This method retrives the complex-valued DFT coefficients for the given direction (record index)
 	 * and channel and stores them in the supplied destination buffer. The method writes exactly
 	 * as many complex-valued coefficients as the function getNumDFTCoeffs() returns.
 	 *
@@ -112,7 +112,7 @@ public:
 	 *
 	 * @return #DAFF_NO_ERROR on success, another #DAFF_ERROR otherwise
 	 */
-	virtual int getDFTCoeffs(int iRecordIndex, int iChannel, float* pfDest) const=0;
+	virtual int getDFTCoeffs(int iRecordIndex, int iChannel, float* pfDest) const = 0;
 };
 
-#endif // IW_DAFF_CONTENTDFT
+#endif  // IW_DAFF_CONTENTDFT

@@ -1,0 +1,38 @@
+# OpenDAFF cmake-format configuration
+# Format CMake files consistently
+
+# Line width for formatting
+line_width: 100
+
+# Number of spaces for indentation
+tab_size: 4
+
+# Use spaces instead of tabs
+use_tabchars: false
+
+# Number of spaces to indent function/macro bodies
+dangle_parens: false
+
+# If true, separate flow control names from parentheses with a space
+separate_ctrl_name_with_space: true
+
+# If true, separate function names from parentheses with a space
+separate_fn_name_with_space: false
+
+# Align the argument list of a function call to the left margin
+align_arguments: true
+
+# Additional commands to recognize
+additional_commands:
+  # OpenDAFF specific commands
+  set_property:
+    flags: [TARGET, FOLDER]
+  target_link_libraries:
+    kwargs:
+      PUBLIC: "*"
+      PRIVATE: "*"
+      INTERFACE: "*"
+
+# Keyword settings
+keyword_case: "upper" # Use uppercase for CMake keywords
+enable_markup: false

@@ -1,72 +1,71 @@
 /*
-* -------------------------------------------------------------------------------------
-*
-*  OpenDAFF - A free, open source software package for directional audio data
-*  Copyright 2016 Institute of Technical Acoustics, RWTH Aachen University
-*  OpenDAFF is distributed under the Apache License Version 2.0.
-*
-*  ------------------------------------------------------------------------------------
-*
-*/
+ * -------------------------------------------------------------------------------------
+ *
+ *  OpenDAFF - A free, open source software package for directional audio data
+ *  Copyright 2016 Institute of Technical Acoustics, RWTH Aachen University
+ *  OpenDAFF is distributed under the Apache License Version 2.0.
+ *
+ *  ------------------------------------------------------------------------------------
+ *
+ */
 
 #include "QtDAFFVizTestWindow.h"
+
+#include <vtkCubeSource.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
+#include <vtkSmartPointer.h>
+#include <vtkSphereSource.h>
+
 #include "ui_DAFFVizQtTestWindow.h"
 
-#include <vtkPolyDataMapper.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-#include <vtkSphereSource.h>
-#include <vtkCubeSource.h>
-#include <vtkSmartPointer.h>
 
-
-QtDAFFVizTestWindow::QtDAFFVizTestWindow( QWidget *parent ) :
-    QMainWindow(parent),
-	ui( new Ui::QtDAFFVizTestWindow )
+QtDAFFVizTestWindow::QtDAFFVizTestWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::QtDAFFVizTestWindow)
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
 	node = new DAFFViz::SGNode();
 	nodeCarpet = new DAFFViz::SGNode();
 	renderer = vtkSmartPointer<vtkRenderer>::New();
 
-	//spherical coordinates
-	//node->OnSetFollowerCamera(renderer->GetActiveCamera());
+	// spherical coordinates
+	// node->OnSetFollowerCamera(renderer->GetActiveCamera());
 	spherical = new DAFFViz::SphericalCoordinateAssistant();
 	node->AddChildNode(spherical);
-	
+
 	////grid
-	//grid = new DAFFViz::Grid();
-	//nodeCarpet->AddChildNode(grid);
+	// grid = new DAFFViz::Grid();
+	// nodeCarpet->AddChildNode(grid);
 
 	////label
-	//label = new DAFFViz::Label();
-	//nodeCarpet->AddChildNode(label);
+	// label = new DAFFViz::Label();
+	// nodeCarpet->AddChildNode(label);
 
 	////line not showing
-	//line = new DAFFViz::Line(0, 0, 0, 1, 1, 1);
-	//nodeCarpet->AddChildNode(line);
+	// line = new DAFFViz::Line(0, 0, 0, 1, 1, 1);
+	// nodeCarpet->AddChildNode(line);
 
 	////arrow not showing
-	//carpetXArrow = new DAFFViz::Arrow(10, 1, 100, 1, 100);
-	//carpetXArrow->SetVisible(true);
-	//nodeCarpet->AddChildNode(carpetXArrow);
+	// carpetXArrow = new DAFFViz::Arrow(10, 1, 100, 1, 100);
+	// carpetXArrow->SetVisible(true);
+	// nodeCarpet->AddChildNode(carpetXArrow);
 
-	//cartesian coordinates not showing and hiding label and grid
+	// cartesian coordinates not showing and hiding label and grid
 	cartesian = new DAFFViz::CartesianCoordinateAssistant();
 	nodeCarpet->AddChildNode(cartesian);
 
-	//this->ui->vtkWidgetBalloon->GetRenderWindow->SetRenderer( m_pRenderer );
+	// this->ui->vtkWidgetBalloon->GetRenderWindow->SetRenderer( m_pRenderer );
 
 	renderer->AddActor(node->GetNodeAssembly());
 	camera = renderer->GetActiveCamera();
 	camera->SetPosition(0, 0, 5);
-	//node->OnSetFollowerCamera(camera);
+	// node->OnSetFollowerCamera(camera);
 	this->ui->vtkWidgetBalloon->GetRenderWindow()->AddRenderer(renderer);
 	this->ui->lineEditFrequency->setText(0);
 	this->ui->lineEditPhi->setText(0);
 	this->ui->lineEditTheta->setText(0);
 
-	//2D Plot
+	// 2D Plot
 	view = vtkSmartPointer<vtkContextView>::New();
 	view->SetInteractor(this->ui->vtkWidgetPlot->GetInteractor());
 	this->ui->vtkWidgetPlot->SetRenderWindow(view->GetRenderWindow());
@@ -86,28 +85,24 @@ QtDAFFVizTestWindow::~QtDAFFVizTestWindow()
 
 void QtDAFFVizTestWindow::on_actionQuit_triggered()
 {
-    close();
+	close();
 }
 
 void QtDAFFVizTestWindow::on_actionOpen_triggered()
 {
-	QString fileName = QFileDialog::getOpenFileName(this,
-		tr("Open Daff Files"), "C:/", tr("Daff Files (*.daff)"));
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Daff Files"), "C:/", tr("Daff Files (*.daff)"));
 	reader = DAFFReader::create();
 	reader->openFile(fileName.toStdString());
 	renderer->Clear();
 	int contentType = reader->getContentType();
 
-	if (contentType == DAFF_IMPULSE_RESPONSE)
-	{
+	if (contentType == DAFF_IMPULSE_RESPONSE) {
 		carpetPlot = new DAFFViz::CarpetPlot(dynamic_cast<DAFFContentIR*>(reader->getContent()));
 		nodeCarpet->AddChildNode(carpetPlot);
-		//rendererPlot->AddActor(nodeCarpet->GetNodeAssembly());
-	}
-	else
-	{
-		balloonPlot = new DAFFViz::BalloonPlot( node, reader->getContent() );
-		//renderer->AddActor(node->GetNodeAssembly());
+		// rendererPlot->AddActor(nodeCarpet->GetNodeAssembly());
+	} else {
+		balloonPlot = new DAFFViz::BalloonPlot(node, reader->getContent());
+		// renderer->AddActor(node->GetNodeAssembly());
 		ui->textBrowser_2->append("current frequency index: ");
 		ui->textBrowser_2->append(QString::fromStdString(std::to_string(balloonPlot->GetSelectedFrequency())));
 
@@ -152,40 +147,35 @@ void QtDAFFVizTestWindow::drawGraph()
 	float fBeta = ui->lineEditTheta->text().toFloat();
 	float alphaStart = dynamic_cast<const DAFFContentMS*>(reader->getContent())->getProperties()->getAlphaStart();
 	float betaStart = dynamic_cast<const DAFFContentMS*>(reader->getContent())->getProperties()->getBetaStart();
-	float alphaResolution = dynamic_cast<const DAFFContentMS*>(reader->getContent())->getProperties()->getAlphaResolution();
-	float betaResolution = dynamic_cast<const DAFFContentMS*>(reader->getContent())->getProperties()->getBetaResolution();
+	float alphaResolution =
+		dynamic_cast<const DAFFContentMS*>(reader->getContent())->getProperties()->getAlphaResolution();
+	float betaResolution =
+		dynamic_cast<const DAFFContentMS*>(reader->getContent())->getProperties()->getBetaResolution();
 	int recordIndex;
-	if (betaStart == 0.0f)
-	{
+	if (betaStart == 0.0f) {
 		int iBeta = fBeta / betaResolution;
-		if (iBeta == 0)
-		{
+		if (iBeta == 0) {
 			recordIndex = 0;
-		}
-		else
-		{
+		} else {
 			int iAlpha = (fAlpha - alphaStart) / alphaResolution;
-			recordIndex = (iBeta-1)*alphaPoints + iAlpha + 1;
-		}		
-	}
-	else
-	{
+			recordIndex = (iBeta - 1) * alphaPoints + iAlpha + 1;
+		}
+	} else {
 		int iAlpha = (fAlpha - alphaStart) / alphaResolution;
-		int iBeta = (fBeta-betaStart) / betaResolution;
-		recordIndex = iBeta*alphaPoints + iAlpha;
+		int iBeta = (fBeta - betaStart) / betaResolution;
+		recordIndex = iBeta * alphaPoints + iAlpha;
 	}
-	
+
 	table->SetNumberOfRows(frequencies.size());
 
-	for (int i = 0; i < table->GetNumberOfRows(); i++)
-	{
+	for (int i = 0; i < table->GetNumberOfRows(); i++) {
 		table->SetValue(i, 0, frequencies[i]);
 		dynamic_cast<const DAFFContentMS*>(reader->getContent())->getMagnitude(recordIndex, 0, i, magnitude);
 		table->SetValue(i, 1, magnitude);
 	}
 	chart = vtkSmartPointer<vtkChartXY>::New();
 	view->GetScene()->AddItem(chart);
-	vtkSmartPointer< vtkPlot > line = chart->AddPlot( vtkChart::LINE );
+	vtkSmartPointer<vtkPlot> line = chart->AddPlot(vtkChart::LINE);
 	line->SetInputData(table, 0, 1);
 	line->SetColor(255, 0, 0, 255);
 	fAlpha = 0;

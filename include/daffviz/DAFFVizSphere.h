@@ -19,63 +19,61 @@ class vtkActor;
 class vtkSphereSource;
 class vtkPolyDataMapper;
 
-namespace DAFFViz
-{
+namespace DAFFViz {
 
-	//! Simple sphere object node
-	/**
-	 * This class derived from the scene graph node class creates a sphere from VTK.
-	 */
+//! Simple sphere object node
+/**
+ * This class derived from the scene graph node class creates a sphere from VTK.
+ */
 
-	class DAFF_API Sphere : public DAFFViz::SGNode
-	{
-	public:
-		Sphere();
-		Sphere(double dRadius, int iPhiResolution, int iThetaResolution);
-		Sphere(DAFFViz::SGNode* pParentNode, double dRadius, int iPhiResolution, int iThetaResolution);
-		virtual ~Sphere();
+class DAFF_API Sphere : public DAFFViz::SGNode {
+  public:
+	Sphere();
+	Sphere(double dRadius, int iPhiResolution, int iThetaResolution);
+	Sphere(DAFFViz::SGNode* pParentNode, double dRadius, int iPhiResolution, int iThetaResolution);
+	virtual ~Sphere();
 
-		// --= object related methods =--
+	// --= object related methods =--
 
-		double GetRadius() const;
-		void SetRadius(double dRadius);
+	double GetRadius() const;
+	void SetRadius(double dRadius);
 
-		int GetPhiResolution() const;
-		void SetPhiResolution(int iResolution);
-	
-		int GetThetaResolution() const;
-		void SetThetaResolution(int iResolution);
+	int GetPhiResolution() const;
+	void SetPhiResolution(int iResolution);
+
+	int GetThetaResolution() const;
+	void SetThetaResolution(int iResolution);
 
 
-		// --= general methods =--
+	// --= general methods =--
 
-		//! Color getter
-		void GetColor(double& r, double& g, double& b);
+	//! Color getter
+	void GetColor(double& r, double& g, double& b);
 
-		//! Color setter
-		void SetColor(const double r, const double g, const double b);
+	//! Color setter
+	void SetColor(const double r, const double g, const double b);
 
-		//! Alpha getter
-		double GetAlpha() const;
+	//! Alpha getter
+	double GetAlpha() const;
 
-		//! Alpha setter
-		void SetAlpha(const double a);
+	//! Alpha setter
+	void SetAlpha(const double a);
 
-		//! Set visibility
-		void SetVisible(bool bVisible);
+	//! Set visibility
+	void SetVisible(bool bVisible);
 
-		//! Get visibility
-		bool IsVisible() const;
+	//! Get visibility
+	bool IsVisible() const;
 
-	private:
-		vtkSmartPointer< vtkSphereSource >	m_pSource;
-		vtkSmartPointer< vtkPolyDataMapper >  m_pMapper;
-		vtkSmartPointer< vtkActor >			m_pActor;
+  private:
+	vtkSmartPointer<vtkSphereSource> m_pSource;
+	vtkSmartPointer<vtkPolyDataMapper> m_pMapper;
+	vtkSmartPointer<vtkActor> m_pActor;
 
-		// The initializer generates dynamic objects like source, mapper, actor ...
-		void init();
-	};
+	// The initializer generates dynamic objects like source, mapper, actor ...
+	void init();
+};
 
-} // End of namespace "DAFFViz"
+}  // namespace DAFFViz
 
-#endif //  IW_DAFF_SPHERE
+#endif  //  IW_DAFF_SPHERE

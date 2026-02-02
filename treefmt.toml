@@ -1,0 +1,132 @@
+# treefmt configuration for OpenDAFF
+# Multi-language code formatting
+
+[global]
+excludes = [
+    # Git and version control
+    "**/.gitignore",
+    "**/.git/**",
+
+    # Build directories
+    "build/**",
+    "build-*/**",
+    "dist/**",
+    "bin/**",
+
+    # IDE and editor files
+    "**/.vscode/**",
+    "**/.idea/**",
+    "**/*.user",
+    "**/*.user.proto",
+
+    # Binary and data files
+    "**/*.daff",
+    "**/*.DAFF",
+    "**/*.pdf",
+    "**/*.png",
+    "**/*.jpg",
+    "**/*.jpeg",
+    "**/*.gif",
+    "**/*.ico",
+    "**/*.wav",
+    "**/*.mp3",
+
+    # Generated files
+    "**/*.mex*",
+    "**/*.pyc",
+    "**/__pycache__/**",
+    "**/*.so",
+    "**/*.dll",
+    "**/*.dylib",
+    "**/*.a",
+    "**/*.lib",
+    "**/*.o",
+    "**/*.obj",
+
+    # Documentation
+    "doc/html/**",
+    "doc/latex/**",
+    "**/Doxyfile",
+
+    # Qt generated files
+    "**/*.qrc",
+    "**/moc_*.cpp",
+    "**/ui_*.h",
+
+    # Jupyter notebooks (special formatting)
+    "**/*.ipynb",
+
+    # License files (should not be reformatted)
+    "LICENSE",
+    "LICENSE.md",
+
+    # Legacy Windows line-ending batch files
+    "**/*.bat",
+
+    # VTK/CMake config files
+    "**/*Config.cmake",
+    "**/*-config.cmake",
+]
+
+# C/C++ formatter
+[formatter.clang-format]
+command = "clang-format"
+options = ["-i"]
+includes = [
+    "*.c",
+    "*.cpp",
+    "*.cc",
+    "*.cxx",
+    "*.h",
+    "*.hpp",
+    "*.hxx",
+]
+
+# CMake formatter
+[formatter.cmake-format]
+command = "cmake-format"
+options = ["-i"]
+includes = [
+    "CMakeLists.txt",
+    "*.cmake",
+]
+
+# Python formatter - import sorting
+[formatter.isort]
+command = "isort"
+includes = ["*.py"]
+
+# Python formatter - code formatting (runs after isort)
+[formatter.black]
+command = "black"
+includes = ["*.py"]
+priority = 1
+
+# C# formatter (if available)
+[formatter.dotnet-format]
+command = "dotnet"
+options = ["format"]
+includes = ["*.cs"]
+
+# Markdown, YAML, JSON formatter
+[formatter.prettier]
+command = "prettier"
+options = ["-w"]
+includes = [
+    "*.md",
+    "*.yaml",
+    "*.yml",
+    "*.json",
+]
+excludes = [
+    # README might have special formatting
+    "README.md",
+    # Keep FILEFORMAT.md as-is (tables)
+    "FILEFORMAT.md",
+]
+
+# Shell script formatter
+[formatter.shfmt]
+command = "shfmt"
+options = ["-s", "-w"]
+includes = ["*.sh"]

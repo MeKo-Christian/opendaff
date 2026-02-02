@@ -9,16 +9,18 @@
  *
  */
 
+#include <DAFF.h>
+
 #include <cassert>
 #include <iostream>
-#include <math.h>
 
-#include <DAFF.h>
+#include <math.h>
 #define EPSILON 0.01
 
 using namespace std;
 
-int main() {
+int main()
+{
 	DAFFReader* r = DAFFReader::create();
 
 	int ec = r->openFile("verify_1x1_orient_0-0-0.daff");
@@ -32,25 +34,23 @@ int main() {
 	cout << r->getMetadata()->toString() << endl;
 
 	// Access the content
-	DAFFContentIR* x = dynamic_cast<DAFFContentIR*>( r->getContent() );
-	
+	DAFFContentIR* x = dynamic_cast<DAFFContentIR*>(r->getContent());
+
 	float data[4];
 
-	for (int beta=0; beta<=180; beta++)
-	{
-		for (int alpha=0; alpha<360; alpha++)
-		{
+	for (int beta = 0; beta <= 180; beta++) {
+		for (int alpha = 0; alpha < 360; alpha++) {
 			int index;
 			bool outside;
 
-			x->getNearestNeighbour(DAFF_DATA_VIEW, (float) alpha, (float) beta, index, outside);
-			assert( !outside );
+			x->getNearestNeighbour(DAFF_DATA_VIEW, (float)alpha, (float)beta, index, outside);
+			assert(!outside);
 
-			x->getFilterCoeffs(index, 0, data);			
+			x->getFilterCoeffs(index, 0, data);
 
 			// Ensure ordinals
-			assert( (data[0] - floor(data[0])) == 0 );
-			int value = (int) data[0];
+			assert((data[0] - floor(data[0])) == 0);
+			int value = (int)data[0];
 
 			float alpha2 = float(value % 1000);
 			float beta2 = (value / 1000.0f);
@@ -59,13 +59,14 @@ int main() {
 
 			if ((fabs(alpha - alpha2) > EPSILON) || (fabs(beta - beta2) > EPSILON)) {
 				// Ignore single records at the poles
-				if ((beta == 0) || (beta == 180)) continue;
+				if ((beta == 0) || (beta == 180))
+					continue;
 
 				cout << "Error!" << endl;
-				assert( false );
+				assert(false);
 			}
 		}
 	}
-	
+
 	r->closeFile();
 }

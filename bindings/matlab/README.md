@@ -1,8 +1,6 @@
-
 # OpenDAFF - A free, open source software package for directional audio data
 
-
-## License 
+## License
 
 Copyright 2016 - 2018 Institute of Technical Acoustics, RWTH Aachen University
 
@@ -19,7 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 You should also have received a [copy of the License](LICENSE.md) with the OpenDAFF software package.
-
 
 ## Matlab bindings
 

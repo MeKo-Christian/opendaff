@@ -12,33 +12,26 @@
 #ifndef QDAFF2DPLOTFRAME_H
 #define QDAFF2DPLOTFRAME_H
 
-#include <QFrame>
-#include <QGraphicsView>
-#include <QGraphicsScene>
-#include <QGraphicsItem>
-#include <QOpenGLWidget>
-
 #include <DAFF.h>
 
+#include <QFrame>
+#include <QGraphicsItem>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QOpenGLWidget>
 #include <iostream>
 
-class QDAFF2DPlotFrame : public QFrame
-{
-    //Q_OBJECT
+class QDAFF2DPlotFrame : public QFrame {
+	// Q_OBJECT
 
-public:
-	inline QDAFF2DPlotFrame( QWidget *parent = Q_NULLPTR )
-		: QFrame( parent )
+  public:
+	inline QDAFF2DPlotFrame(QWidget* parent = Q_NULLPTR) : QFrame(parent)
 	{
-		QGraphicsView* pView = new QGraphicsView( new QGraphicsScene(), this );
-    }
+		QGraphicsView* pView = new QGraphicsView(new QGraphicsScene(), this);
+	}
 
-public slots:
-    inline void ReadDAFF( const DAFFReader* pReader )
-    {
-        std::cout << "2D: " << pReader->getFilename() << std::endl;
-
-    }
+  public slots:
+	inline void ReadDAFF(const DAFFReader* pReader) { std::cout << "2D: " << pReader->getFilename() << std::endl; }
 };
 
-#endif // QDAFF2DPLOTFRAME_H
+#endif  // QDAFF2DPLOTFRAME_H

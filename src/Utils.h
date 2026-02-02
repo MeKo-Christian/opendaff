@@ -5,68 +5,72 @@
 
 // STL includes
 #include <cmath>
+#include <cstring>  // required for size_t
 #include <string>
-#include <cstring> // required for size_t
-#include <stdint.h> // required for int64_t
 
-namespace DAFF
-{
-	// Define necessary roundf for Microsoft compilers
-	#ifdef _MSC_VER 
-	#define roundf(x) (x<0?ceil((x)-0.5f):floor((x)+0.5f));
-	#endif // _MSC_VER
+#include <stdint.h>  // required for int64_t
 
-	// --= Complex number conversion =--
+namespace DAFF {
+// Define necessary roundf for Microsoft compilers
+#ifdef _MSC_VER
+#define roundf(x) (x < 0 ? ceil((x) - 0.5f) : floor((x) + 0.5f));
+#endif  // _MSC_VER
 
-	float cabs(float Re, float Im);
-	float carg(float Re, float Im);
+// --= Complex number conversion =--
 
-	// degrees
-	float anglef_proj_0_360_DEG(float alpha);
-	float anglef_mindiff_0_360_DEG(float alpha, float beta);
-	float anglef_mindiff_abs_0_360_DEG(float alpha, float beta);
+float cabs(float Re, float Im);
+float carg(float Re, float Im);
 
-	// radiants
-	float anglef_proj_0_2PI(float alpha);
-	float anglef_mindiff_0_2PI(float alpha, float beta);
-	float anglef_mindiff_abs_0_2PI(float alpha, float beta);
+// degrees
+float anglef_proj_0_360_DEG(float alpha);
+float anglef_mindiff_0_360_DEG(float alpha, float beta);
+float anglef_mindiff_abs_0_360_DEG(float alpha, float beta);
 
-	// --= Endianess conversion functions =--
- 
-	/*
-	 *  All convert from little endian (used within the DAFF files)
-	 *  into the systems endianess (little endian -> system endianess)
-	 *
-	 */
+// radiants
+float anglef_proj_0_2PI(float alpha);
+float anglef_mindiff_0_2PI(float alpha, float beta);
+float anglef_mindiff_abs_0_2PI(float alpha, float beta);
 
-	extern void (*le2se_2byte)(void* src, size_t count);
-	extern void (*le2se_3byte)(void* src, size_t count);
-	extern void (*le2se_4byte)(void* src, size_t count);
-	extern void (*le2se_8byte)(void* src, size_t count);
+// --= Endianess conversion functions =--
 
-	// --= Memory (de)allocation =--
+/*
+ *  All convert from little endian (used within the DAFF files)
+ *  into the systems endianess (little endian -> system endianess)
+ *
+ */
 
-	// Allocate/free memory on with a 16-byte boundary
-	void* malloc_aligned16(size_t bytes);
-	void free_aligned16(void* ptr);
+extern void (*le2se_2byte)(void* src, size_t count);
+extern void (*le2se_3byte)(void* src, size_t count);
+extern void (*le2se_4byte)(void* src, size_t count);
+extern void (*le2se_8byte)(void* src, size_t count);
 
-	// --= Sample type conversion =--
+// --= Memory (de)allocation =--
 
-	//! Convert signed integer 16-Bit -> single precision floating point (32-Bit)
-	void stc_sint16_to_float(float* dest, const short* src, size_t count, int input_stride=1, int output_stride=1, float gain=1);
-	void stc_sint16_to_float_add(float* dest, const short* src, size_t count, int input_stride=1, int output_stride=1, float gain=1);
+// Allocate/free memory on with a 16-byte boundary
+void* malloc_aligned16(size_t bytes);
+void free_aligned16(void* ptr);
 
-	//! Convert signed integer 24-Bit -> single precision floating point (32-Bit)
-	void stc_sint24_to_float(float* dest, const void* src, size_t count, int input_stride=1, int output_stride=1, float gain=1);
-	void stc_sint24_to_float_add(float* dest, const void* src, size_t count, int input_stride=1, int output_stride=1, float gain=1);
+// --= Sample type conversion =--
 
+//! Convert signed integer 16-Bit -> single precision floating point (32-Bit)
+void stc_sint16_to_float(float* dest, const short* src, size_t count, int input_stride = 1, int output_stride = 1,
+						 float gain = 1);
+void stc_sint16_to_float_add(float* dest, const short* src, size_t count, int input_stride = 1, int output_stride = 1,
+							 float gain = 1);
 
-	// --= File system functions =--
-
-	//! Größe einer Datei in Bytes zurückgeben (Gibt im Fehlerfall -1 zurück)
-	int64_t getFileSize(const std::string& sFilename);
+//! Convert signed integer 24-Bit -> single precision floating point (32-Bit)
+void stc_sint24_to_float(float* dest, const void* src, size_t count, int input_stride = 1, int output_stride = 1,
+						 float gain = 1);
+void stc_sint24_to_float_add(float* dest, const void* src, size_t count, int input_stride = 1, int output_stride = 1,
+							 float gain = 1);
 
 
-} // End of namespace "DAFF"
+// --= File system functions =--
 
-#endif // IW_DAFF_INTERNAL_UTILS
+//! Größe einer Datei in Bytes zurückgeben (Gibt im Fehlerfall -1 zurück)
+int64_t getFileSize(const std::string& sFilename);
+
+
+}  // namespace DAFF
+
+#endif  // IW_DAFF_INTERNAL_UTILS

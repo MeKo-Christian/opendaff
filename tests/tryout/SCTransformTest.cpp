@@ -9,17 +9,19 @@
  *
  */
 
-#include <stdio.h>
+#include <DAFFDefs.h>
+#include <DAFFSCTransform.h>
+#include <DAFFUtils.h>
+
 #include <cmath>
 
-#include <DAFFDefs.h>
-#include <DAFFUtils.h>
-#include <DAFFSCTransform.h>
+#include <stdio.h>
 
 using namespace std;
 
-void test_direction_norm() {
-	float a,e, a2, e2;
+void test_direction_norm()
+{
+	float a, e, a2, e2;
 
 	printf("object view normalization\n\n");
 
@@ -56,10 +58,10 @@ void test_direction_norm() {
 	printf("<%0.3f,%0.3f> --> <%0.3f,%0.3f>\n", a, e, a2, e2);
 
 	printf("\n");
-
 }
 
-void test(float y, float p, float r) {
+void test(float y, float p, float r)
+{
 	float azi1, ele1, azi2, ele2, alpha, beta;
 
 	DAFFOrientationYPR o(y, p, r);
@@ -71,63 +73,58 @@ void test(float y, float p, float r) {
 	t.transformDSC2OSC(alpha, beta, azi2, ele2);
 	DAFFUtils::NormalizeDirection(DAFF_OBJECT_VIEW, azi2, ele2, azi2, ele2);
 
-	printf("OSC <%0.3f,%0.3f> --> DSC <%0.3f,%0.3f> --> OSC <%0.3f,%0.3f>\n",
-		   azi1, ele1, alpha, beta, azi2, ele2);
+	printf("OSC <%0.3f,%0.3f> --> DSC <%0.3f,%0.3f> --> OSC <%0.3f,%0.3f>\n", azi1, ele1, alpha, beta, azi2, ele2);
 
 	azi1 = 90, ele1 = 0;
 	t.transformOSC2DSC(azi1, ele1, alpha, beta);
 	t.transformDSC2OSC(alpha, beta, azi2, ele2);
 	DAFFUtils::NormalizeDirection(DAFF_OBJECT_VIEW, azi2, ele2, azi2, ele2);
 
-	printf("OSC <%0.3f,%0.3f> --> DSC <%0.3f,%0.3f> --> OSC <%0.3f,%0.3f>\n",
-		   azi1, ele1, alpha, beta, azi2, ele2);
+	printf("OSC <%0.3f,%0.3f> --> DSC <%0.3f,%0.3f> --> OSC <%0.3f,%0.3f>\n", azi1, ele1, alpha, beta, azi2, ele2);
 
 	azi1 = 0, ele1 = 90;
 	t.transformOSC2DSC(azi1, ele1, alpha, beta);
 	t.transformDSC2OSC(alpha, beta, azi2, ele2);
 	DAFFUtils::NormalizeDirection(DAFF_OBJECT_VIEW, azi2, ele2, azi2, ele2);
 
-	printf("OSC <%0.3f,%0.3f> --> DSC <%0.3f,%0.3f> --> OSC <%0.3f,%0.3f>\n",
-		   azi1, ele1, alpha, beta, azi2, ele2);
+	printf("OSC <%0.3f,%0.3f> --> DSC <%0.3f,%0.3f> --> OSC <%0.3f,%0.3f>\n", azi1, ele1, alpha, beta, azi2, ele2);
 
 	azi1 = 20, ele1 = -10;
 	t.transformOSC2DSC(azi1, ele1, alpha, beta);
 	t.transformDSC2OSC(alpha, beta, azi2, ele2);
 	DAFFUtils::NormalizeDirection(DAFF_OBJECT_VIEW, azi2, ele2, azi2, ele2);
 
-	printf("OSC <%0.3f,%0.3f> --> DSC <%0.3f,%0.3f> --> OSC <%0.3f,%0.3f>\n",
-		   azi1, ele1, alpha, beta, azi2, ele2);
+	printf("OSC <%0.3f,%0.3f> --> DSC <%0.3f,%0.3f> --> OSC <%0.3f,%0.3f>\n", azi1, ele1, alpha, beta, azi2, ele2);
 
 	azi1 = 60, ele1 = 90;
 	t.transformOSC2DSC(azi1, ele1, alpha, beta);
 	t.transformDSC2OSC(alpha, beta, azi2, ele2);
 	DAFFUtils::NormalizeDirection(DAFF_OBJECT_VIEW, azi2, ele2, azi2, ele2);
 
-	printf("OSC <%0.3f,%0.3f> --> DSC <%0.3f,%0.3f> --> OSC <%0.3f,%0.3f>\n",
-		   azi1, ele1, alpha, beta, azi2, ele2);
+	printf("OSC <%0.3f,%0.3f> --> DSC <%0.3f,%0.3f> --> OSC <%0.3f,%0.3f>\n", azi1, ele1, alpha, beta, azi2, ele2);
 
 	printf("\n");
 }
 
-int main() {
-
+int main()
+{
 	test_direction_norm();
 	printf("\n");
-	
-	test(0,0,0);
+
+	test(0, 0, 0);
 	printf("\n");
 
-	test(90,0,0);
+	test(90, 0, 0);
 	printf("\n");
 
-	test(0,90,0);
+	test(0, 90, 0);
 	printf("\n");
 
-	test(0,0,90);
+	test(0, 0, 90);
 	printf("\n");
 
-	test(0,45,0);
+	test(0, 45, 0);
 	printf("\n");
-	
+
 	return 0;
 }

@@ -3,21 +3,19 @@
 
 #include <QDialog>
 #include <QDir>
-#include <QString>
 #include <QSettings>
+#include <QString>
 
 namespace Ui {
 class QDAFFDialogExport3DPlotImageSeries;
 }
 
-class QDAFFDialogExport3DPlotImageSeries : public QDialog
-{
-    Q_OBJECT
+class QDAFFDialogExport3DPlotImageSeries : public QDialog {
+	Q_OBJECT
 
-public:
-
-	explicit QDAFFDialogExport3DPlotImageSeries( QWidget *parent, const QDir& oBasePath, const QString& sFileBaseName );
-    ~QDAFFDialogExport3DPlotImageSeries();
+  public:
+	explicit QDAFFDialogExport3DPlotImageSeries(QWidget* parent, const QDir& oBasePath, const QString& sFileBaseName);
+	~QDAFFDialogExport3DPlotImageSeries();
 
 	QString GetFileBaseName() const;
 	QString GetExportPath() const;
@@ -26,23 +24,23 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 
-	bool GetAnimationYaw( double&, double& ) const;
-	bool GetAnimationPitch( double&, double& ) const;
-	bool GetAnimationFrequencyIndices( int&, int& ) const;
-	bool GetAnimationChannelIndices( int&, int& ) const;
-	bool GetAnimationElevation( double&, double& ) const;
+	bool GetAnimationYaw(double&, double&) const;
+	bool GetAnimationPitch(double&, double&) const;
+	bool GetAnimationFrequencyIndices(int&, int&) const;
+	bool GetAnimationChannelIndices(int&, int&) const;
+	bool GetAnimationElevation(double&, double&) const;
 
-	void SetAnimationFrequencyIndices( int, int );
-	void SetAnimationChannelIndices( int, int );
-	void SetAnimationElevationRange( double, double );
+	void SetAnimationFrequencyIndices(int, int);
+	void SetAnimationChannelIndices(int, int);
+	void SetAnimationElevationRange(double, double);
 
-private slots:
-    void on_pushButton_Export_clicked();
+  private slots:
+	void on_pushButton_Export_clicked();
 	void on_pushButton_Browse_clicked();
 
-private:
-    Ui::QDAFFDialogExport3DPlotImageSeries *ui;
-    QDir m_oBasePath;
+  private:
+	Ui::QDAFFDialogExport3DPlotImageSeries* ui;
+	QDir m_oBasePath;
 	QString m_sFileBaseName;
 	bool m_bExport;
 
@@ -50,4 +48,4 @@ private:
 	void StoreSettings() const;
 };
 
-#endif // DAFFDIALOGEXPORT3DPLOTIMAGESERIES_H
+#endif  // DAFFDIALOGEXPORT3DPLOTIMAGESERIES_H

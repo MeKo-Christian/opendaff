@@ -4,7 +4,7 @@
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD fdwReason, LPVOID lpReserved)
 {
-    return TRUE;
+	return TRUE;
 }
 
-#endif // WIN32
+#endif  // WIN32

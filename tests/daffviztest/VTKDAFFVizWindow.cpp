@@ -16,351 +16,346 @@
 #include <daffviz/DAFFVizLabel.h>
 
 // VTK includes
+#include <vtkAssembly.h>
 #include <vtkCamera.h>
 #include <vtkLight.h>
 #include <vtkPNGWriter.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderer.h>
-#include <vtkWindowToImageFilter.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkSmartPointer.h>
 #include <vtkProp.h>
-#include <vtkAssembly.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderer.h>
+#include <vtkSmartPointer.h>
+#include <vtkWindowToImageFilter.h>
 
 // STL includes
 #include <math.h>
 
 
-namespace DAFFViz
+namespace DAFFViz {
+
+VTKDAFFVizWindow::VTKDAFFVizWindow()
 {
+	m_pRenderer = vtkSmartPointer<vtkRenderer>::New();
+	m_pRenderer->SetBackground(0.1f, 0.1f, 1.0f);
 
-	VTKDAFFVizWindow::VTKDAFFVizWindow()
-	{
-		m_pRenderer = vtkSmartPointer< vtkRenderer > ::New();
-		m_pRenderer->SetBackground( 0.1f, 0.1f, 1.0f );
+	m_pRenderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+	m_pRenderWindow->AddRenderer(m_pRenderer);
 
-		m_pRenderWindow = vtkSmartPointer< vtkRenderWindow >::New();
-		m_pRenderWindow->AddRenderer( m_pRenderer );
+	m_pRenderWindow->LineSmoothingOn();
 
-		m_pRenderWindow->LineSmoothingOn();
+	m_pCameraLight = vtkSmartPointer<vtkLight>::New();
+	m_pCameraLight->SetLightTypeToCameraLight();
 
-		m_pCameraLight = vtkSmartPointer<vtkLight >::New();
-		m_pCameraLight->SetLightTypeToCameraLight();
+	m_pRenderer->AddLight(m_pCameraLight);
 
-		m_pRenderer->AddLight( m_pCameraLight );
+	m_bCameraLight = true;
 
-		m_bCameraLight = true;
+	m_iRenderCount = 0;
+	m_bRenderInProgress = false;
+	m_bDestroyInProgress = false;
 
-		m_iRenderCount = 0;
-		m_bRenderInProgress = false;
-		m_bDestroyInProgress = false;
+	m_pCamera = m_pRenderer->GetActiveCamera();
 
-		m_pCamera = m_pRenderer->GetActiveCamera();
+	m_pInteractor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
+	m_pInteractor->SetRenderWindow(m_pRenderWindow);
 
-		m_pInteractor = vtkSmartPointer< vtkRenderWindowInteractor >::New();
-		m_pInteractor->SetRenderWindow( m_pRenderWindow );
-	
-		m_bInteractionLeftBtn = false;
-		m_bInteractionRightBtn = false;
-		m_bInteractionMiddleBtn = false;
+	m_bInteractionLeftBtn = false;
+	m_bInteractionRightBtn = false;
+	m_bInteractionMiddleBtn = false;
 
-		m_dLastRootX = 0;
-		m_dLastRootY = 0;
-	}
+	m_dLastRootX = 0;
+	m_dLastRootY = 0;
+}
 
-	VTKDAFFVizWindow::~VTKDAFFVizWindow()
-	{	
-		// Make sure that the rendering is really finished
+VTKDAFFVizWindow::~VTKDAFFVizWindow()
+{
+	// Make sure that the rendering is really finished
+	m_mxRenderCount.lock();
+	m_bDestroyInProgress = true;
+	m_mxRenderCount.unlock();
+
+	// Poll until render end is indicated
+	bool bFinished;
+	do {
 		m_mxRenderCount.lock();
-		m_bDestroyInProgress = true;
+		bFinished = !m_bRenderInProgress;
 		m_mxRenderCount.unlock();
+	} while (!bFinished);
+}
 
-		// Poll until render end is indicated
-		bool bFinished;
-		do
-		{
-			m_mxRenderCount.lock();
-			bFinished = !m_bRenderInProgress;
-			m_mxRenderCount.unlock();
-		} while (!bFinished);
+void VTKDAFFVizWindow::Start()
+{
+	m_pRenderWindow->Render();
+	// m_pRenderWindow->Start();
+	m_pInteractor->Start();
+}
+
+void VTKDAFFVizWindow::SetSceneGraphRootNode(DAFFViz::SGNode* node)
+{
+	DAFFVIZ_LOCK_VTK;
+	m_pRenderer->RemoveAllViewProps();
+	if (node != NULL) {
+		vtkSmartPointer<vtkAssembly> pA = node->GetNodeAssembly();
+		m_pRenderer->AddActor(pA);
+
+		// Set this frame's camera as the follower object
+		node->OnSetFollowerCamera(m_pCamera);
 	}
 
-	void VTKDAFFVizWindow::Start()
-	{
-		m_pRenderWindow->Render();
-		//m_pRenderWindow->Start();
-		m_pInteractor->Start();	
-	}
+	m_pRenderer->ResetCameraClippingRange();
+	DAFFVIZ_UNLOCK_VTK;
 
-	void VTKDAFFVizWindow::SetSceneGraphRootNode( DAFFViz::SGNode* node )
-	{
-		DAFFVIZ_LOCK_VTK;
-		m_pRenderer->RemoveAllViewProps();
-		if( node != NULL )
-		{
-			vtkSmartPointer< vtkAssembly > pA = node->GetNodeAssembly();
-			m_pRenderer->AddActor( pA );
-		
-			// Set this frame's camera as the follower object
-			node->OnSetFollowerCamera( m_pCamera );
-		}
+	m_pSceneRootNode = node;
+}
 
-		m_pRenderer->ResetCameraClippingRange();
-		DAFFVIZ_UNLOCK_VTK;
+// --= Renderer =-- //
 
-		m_pSceneRootNode = node;
-	}
+void VTKDAFFVizWindow::Render()
+{
+	// Increment the update counter
+	m_mxRenderCount.lock();
+	m_iRenderCount++;
+	m_mxRenderCount.unlock();
+}
 
-	// --= Renderer =-- //
+// --= Screen =-- //
 
-	void VTKDAFFVizWindow::Render()
-	{
-		// Increment the update counter
-		m_mxRenderCount.lock();
-		m_iRenderCount++;
-		m_mxRenderCount.unlock();
-	}
+void VTKDAFFVizWindow::SetBackground(double red, double green, double blue)
+{
+	DAFFVIZ_LOCK_VTK;
+	m_pRenderer->SetBackground(red, green, blue);
+	DAFFVIZ_UNLOCK_VTK;
+}
 
-	// --= Screen =-- //
+void VTKDAFFVizWindow::GetBackground(double& red, double& green, double& blue) const
+{
+	m_pRenderer->GetBackground(red, green, blue);
+}
 
-	void VTKDAFFVizWindow::SetBackground( double red, double green, double blue )
-	{
-		DAFFVIZ_LOCK_VTK;
-		m_pRenderer->SetBackground( red, green, blue );
-		DAFFVIZ_UNLOCK_VTK;
-	}
+void VTKDAFFVizWindow::SaveScreenshot(const std::string& sFilename)
+{
+	if (!m_pRenderWindow)
+		return;
 
-	void VTKDAFFVizWindow::GetBackground( double &red, double &green, double &blue ) const
-	{
-		m_pRenderer->GetBackground( red, green, blue );
-	}
+	DAFFVIZ_LOCK_VTK;
+	RenderInternal();
+	DAFFVIZ_UNLOCK_VTK;
 
-	void VTKDAFFVizWindow::SaveScreenshot( const std::string& sFilename )
-	{
-		if (!m_pRenderWindow) return;
+	// Window to image filter
+	vtkSmartPointer<vtkWindowToImageFilter> screenshot = vtkSmartPointer<vtkWindowToImageFilter>::New();
+	screenshot->SetInput(m_pRenderWindow);
 
-		DAFFVIZ_LOCK_VTK;
-		RenderInternal();
-		DAFFVIZ_UNLOCK_VTK;
+	// PNG exporter
+	vtkSmartPointer<vtkPNGWriter> pngwriter = vtkSmartPointer<vtkPNGWriter>::New();
+	pngwriter->SetFileName(sFilename.c_str());
+	pngwriter->SetInputData(screenshot->GetOutput());
+	pngwriter->Write();
+}
 
-		// Window to image filter
-		vtkSmartPointer< vtkWindowToImageFilter > screenshot = vtkSmartPointer< vtkWindowToImageFilter >::New();
-		screenshot->SetInput(m_pRenderWindow);
+// --= Camera =--
 
-		// PNG exporter
-		vtkSmartPointer< vtkPNGWriter > pngwriter = vtkSmartPointer< vtkPNGWriter >::New();
-		pngwriter->SetFileName(sFilename.c_str());
-		pngwriter->SetInputData(screenshot->GetOutput());
-		pngwriter->Write();
-	}
+void VTKDAFFVizWindow::SetCameraPosition(double x, double y, double z)
+{
+	DAFFVIZ_LOCK_VTK;
 
-	// --= Camera =--
+	m_pCamera->SetPosition(x, y, z);
+	m_pRenderer->ResetCameraClippingRange();
 
-	void VTKDAFFVizWindow::SetCameraPosition( double x,  double y,  double z )
-	{
-		DAFFVIZ_LOCK_VTK;
+	DAFFVIZ_UNLOCK_VTK;
+}
 
-		m_pCamera->SetPosition(x, y, z);
-		m_pRenderer->ResetCameraClippingRange();
+void VTKDAFFVizWindow::GetCameraPosition(double& x, double& y, double& z) const
+{
+	m_pCamera->GetPosition(x, y, z);
+}
 
-		DAFFVIZ_UNLOCK_VTK;
-	}
+void VTKDAFFVizWindow::SetCameraFocalPoint(double x, double y, double z)
+{
+	DAFFVIZ_LOCK_VTK;
 
-	void VTKDAFFVizWindow::GetCameraPosition( double& x, double& y, double& z ) const
-	{
-		m_pCamera->GetPosition(x, y, z);
-	}
+	m_pCamera->SetFocalPoint(x, y, z);
+	m_pRenderer->ResetCameraClippingRange();
 
-	void VTKDAFFVizWindow::SetCameraFocalPoint( double x,  double y,  double z )
-	{
-		DAFFVIZ_LOCK_VTK;
+	DAFFVIZ_UNLOCK_VTK;
+}
 
-		m_pCamera->SetFocalPoint(x, y, z);
-		m_pRenderer->ResetCameraClippingRange();
+void VTKDAFFVizWindow::GetCameraFocalPoint(double& x, double& y, double& z) const
+{
+	m_pCamera->GetFocalPoint(x, y, z);
+}
 
-		DAFFVIZ_UNLOCK_VTK;
-	}
+void VTKDAFFVizWindow::DollyCamera(double dDolly)
+{
+	if (m_pCamera->GetParallelProjection())
+		m_pCamera->Zoom(dDolly);
+	else
+		m_pCamera->Dolly(dDolly);
 
-	void VTKDAFFVizWindow::GetCameraFocalPoint( double& x, double& y, double& z ) const
-	{
-		m_pCamera->GetFocalPoint(x, y, z);
-	}
+	DAFFVIZ_LOCK_VTK;
 
-	void VTKDAFFVizWindow::DollyCamera( double dDolly )
-	{
+	m_pRenderer->ResetCameraClippingRange();
 
-		if( m_pCamera->GetParallelProjection() )
-			m_pCamera->Zoom(dDolly);
-		else
-			m_pCamera->Dolly(dDolly);
+	DAFFVIZ_UNLOCK_VTK;
 
-		DAFFVIZ_LOCK_VTK;
+	Render();
+}
 
-		m_pRenderer->ResetCameraClippingRange();
+void VTKDAFFVizWindow::SetParallelProjection()
+{
+	m_pCamera->SetParallelProjection(1);
+}
 
-		DAFFVIZ_UNLOCK_VTK;
+void VTKDAFFVizWindow::SetPerspectiveProjection()
+{
+	m_pCamera->SetParallelProjection(0);
+}
 
-		Render();
-	}
+void VTKDAFFVizWindow::SetCameraType(int iType)
+{
+	DAFFVIZ_LOCK_VTK;
 
-	void VTKDAFFVizWindow::SetParallelProjection()
-	{
-		m_pCamera->SetParallelProjection(1);
-	}
-
-	void VTKDAFFVizWindow::SetPerspectiveProjection()
-	{
+	// Reset if no type
+	if (iType <= 0) {
+		m_pCamera->SetPosition(10, 10, 10);
 		m_pCamera->SetParallelProjection(0);
-	}
 
-	void VTKDAFFVizWindow::SetCameraType( int iType )
-	{
-		DAFFVIZ_LOCK_VTK;
+		m_iCameraType = CAMERA_NONE;
 
-		// Reset if no type
-		if( iType <= 0 )
-		{
-			m_pCamera->SetPosition(10, 10, 10);
-			m_pCamera->SetParallelProjection(0);
-
-			m_iCameraType = CAMERA_NONE;
-
-			DAFFVIZ_UNLOCK_VTK;
-			return;
-		}
-	
-		m_iCameraType = iType;
-		m_pCamera->SetParallelProjection(1);
-
-		if( iType == CAMERA_TOP )
-		{
-			m_pCamera->SetPosition(0, 20, 0);
-			m_pCamera->SetFocalPoint(0.001, 0, 0);
-		}
-		if( iType == CAMERA_BOTTOM )
-		{
-			m_pCamera->SetPosition(0, -20, 0);
-			m_pCamera->SetFocalPoint(0, 0, 0);
-		}
-		if (iType == CAMERA_LEFT) {
-			m_pCamera->SetPosition(-20, 0, 0);
-			m_pCamera->SetFocalPoint(0, 0, 0);
-		}
-		if (iType == CAMERA_RIGHT) {
-			m_pCamera->SetPosition(20, 0, 0);
-			m_pCamera->SetFocalPoint(0, 0, 0);
-		}
-		if (iType == CAMERA_FRONT) {
-			m_pCamera->SetPosition(0, 0, 20);
-			m_pCamera->SetFocalPoint(0, 0, 0);
-		}
-		if (iType == CAMERA_BACK) {
-			m_pCamera->SetPosition(0, 0, -20);
-			m_pCamera->SetFocalPoint(0, 0, 0);
-		}
-
-		m_pCamera->Zoom(1);
-		m_pCamera->Dolly(1);
-
-		m_pRenderer->ResetCameraClippingRange();
 		DAFFVIZ_UNLOCK_VTK;
+		return;
 	}
 
-	void VTKDAFFVizWindow::SetFollowerTarget()
-	{
-		if( m_pSceneRootNode != NULL )
-			m_pSceneRootNode->OnSetFollowerCamera( m_pCamera );
+	m_iCameraType = iType;
+	m_pCamera->SetParallelProjection(1);
+
+	if (iType == CAMERA_TOP) {
+		m_pCamera->SetPosition(0, 20, 0);
+		m_pCamera->SetFocalPoint(0.001, 0, 0);
+	}
+	if (iType == CAMERA_BOTTOM) {
+		m_pCamera->SetPosition(0, -20, 0);
+		m_pCamera->SetFocalPoint(0, 0, 0);
+	}
+	if (iType == CAMERA_LEFT) {
+		m_pCamera->SetPosition(-20, 0, 0);
+		m_pCamera->SetFocalPoint(0, 0, 0);
+	}
+	if (iType == CAMERA_RIGHT) {
+		m_pCamera->SetPosition(20, 0, 0);
+		m_pCamera->SetFocalPoint(0, 0, 0);
+	}
+	if (iType == CAMERA_FRONT) {
+		m_pCamera->SetPosition(0, 0, 20);
+		m_pCamera->SetFocalPoint(0, 0, 0);
+	}
+	if (iType == CAMERA_BACK) {
+		m_pCamera->SetPosition(0, 0, -20);
+		m_pCamera->SetFocalPoint(0, 0, 0);
 	}
 
+	m_pCamera->Zoom(1);
+	m_pCamera->Dolly(1);
 
-	// --= Lighting =--
+	m_pRenderer->ResetCameraClippingRange();
+	DAFFVIZ_UNLOCK_VTK;
+}
 
-	void VTKDAFFVizWindow::AddLight(vtkLight* light)
-	{
-		DAFFVIZ_LOCK_VTK;
-		m_pRenderer->AddLight(light);
-		DAFFVIZ_UNLOCK_VTK;
-	}
+void VTKDAFFVizWindow::SetFollowerTarget()
+{
+	if (m_pSceneRootNode != NULL)
+		m_pSceneRootNode->OnSetFollowerCamera(m_pCamera);
+}
 
-	void VTKDAFFVizWindow::RemoveLight(vtkLight* light)
-	{
-		DAFFVIZ_LOCK_VTK;
-		m_pRenderer->RemoveLight(light);
-		DAFFVIZ_UNLOCK_VTK;
-	}
 
-	void VTKDAFFVizWindow::SetCameraLightOn()
-	{
-		if( m_bCameraLight == true )
-			return;
-		m_pCameraLight->SwitchOn();
-	}
+// --= Lighting =--
 
-	void VTKDAFFVizWindow::SetCameraLightOff()
-	{
-		if (m_bCameraLight == false) return;
+void VTKDAFFVizWindow::AddLight(vtkLight* light)
+{
+	DAFFVIZ_LOCK_VTK;
+	m_pRenderer->AddLight(light);
+	DAFFVIZ_UNLOCK_VTK;
+}
 
-		DAFFVIZ_LOCK_VTK;
-		m_pCameraLight->SwitchOff();
-		DAFFVIZ_UNLOCK_VTK;
+void VTKDAFFVizWindow::RemoveLight(vtkLight* light)
+{
+	DAFFVIZ_LOCK_VTK;
+	m_pRenderer->RemoveLight(light);
+	DAFFVIZ_UNLOCK_VTK;
+}
 
-		m_bCameraLight = false;
-	}
+void VTKDAFFVizWindow::SetCameraLightOn()
+{
+	if (m_bCameraLight == true)
+		return;
+	m_pCameraLight->SwitchOn();
+}
 
-	bool VTKDAFFVizWindow::CameraLightIsOn() const
-	{ 
-		return m_bCameraLight;
-	}
+void VTKDAFFVizWindow::SetCameraLightOff()
+{
+	if (m_bCameraLight == false)
+		return;
 
-	void VTKDAFFVizWindow::SetCameraLightPosition(double x, double y, double z)
-	{
-		DAFFVIZ_LOCK_VTK;
-		m_pCameraLight->SetPosition(x,y,z);
-		DAFFVIZ_UNLOCK_VTK;
-	}
+	DAFFVIZ_LOCK_VTK;
+	m_pCameraLight->SwitchOff();
+	DAFFVIZ_UNLOCK_VTK;
 
-	void VTKDAFFVizWindow::GetCameraLightPosition(double &x, double &y, double &z) const
-	{
-		double* pointer = m_pCameraLight->GetPosition();
-		x = pointer[0];
-		y = pointer[1];
-		z = pointer[2];
-	}
+	m_bCameraLight = false;
+}
 
-	void VTKDAFFVizWindow::RenderInternal()
-	{
-		// Important: First reset the update counter.
-		//            Stored requested updates during the rendering phase.
+bool VTKDAFFVizWindow::CameraLightIsOn() const
+{
+	return m_bCameraLight;
+}
 
-		m_mxRenderCount.lock();
-	
-		if ((m_iRenderCount == 0) || m_bRenderInProgress || m_bDestroyInProgress) {
-			m_mxRenderCount.unlock();
+void VTKDAFFVizWindow::SetCameraLightPosition(double x, double y, double z)
+{
+	DAFFVIZ_LOCK_VTK;
+	m_pCameraLight->SetPosition(x, y, z);
+	DAFFVIZ_UNLOCK_VTK;
+}
 
-			return;
-		}
+void VTKDAFFVizWindow::GetCameraLightPosition(double& x, double& y, double& z) const
+{
+	double* pointer = m_pCameraLight->GetPosition();
+	x = pointer[0];
+	y = pointer[1];
+	z = pointer[2];
+}
 
-		m_iRenderCount = 0;
-		m_bRenderInProgress = true;
-		m_mxRenderCount.unlock();	
+void VTKDAFFVizWindow::RenderInternal()
+{
+	// Important: First reset the update counter.
+	//            Stored requested updates during the rendering phase.
 
-		// Important: The flags m_bRenderInProgress indicated if a thread is 
-		//            currently within the following section (2 lines).
-		//            We explicitly avoid reentrance here!
+	m_mxRenderCount.lock();
 
-		// Try lock agains scene graph nodes (if root node appended to frame)
-		DAFFVIZ_LOCK_VTK;
-
-		m_pRenderWindow->Render();
-
-		// Unlock agains scene graph nodes (if root node appended to frame)
-		DAFFVIZ_UNLOCK_VTK;
-
-		m_pCamera = m_pRenderer->GetActiveCamera();
-
-		m_mxRenderCount.lock();
-		m_bRenderInProgress = false;
+	if ((m_iRenderCount == 0) || m_bRenderInProgress || m_bDestroyInProgress) {
 		m_mxRenderCount.unlock();
+
+		return;
 	}
 
-} // End of namespace "DAFFViz"
+	m_iRenderCount = 0;
+	m_bRenderInProgress = true;
+	m_mxRenderCount.unlock();
+
+	// Important: The flags m_bRenderInProgress indicated if a thread is
+	//            currently within the following section (2 lines).
+	//            We explicitly avoid reentrance here!
+
+	// Try lock agains scene graph nodes (if root node appended to frame)
+	DAFFVIZ_LOCK_VTK;
+
+	m_pRenderWindow->Render();
+
+	// Unlock agains scene graph nodes (if root node appended to frame)
+	DAFFVIZ_UNLOCK_VTK;
+
+	m_pCamera = m_pRenderer->GetActiveCamera();
+
+	m_mxRenderCount.lock();
+	m_bRenderInProgress = false;
+	m_mxRenderCount.unlock();
+}
+
+}  // namespace DAFFViz

@@ -1,54 +1,44 @@
 #include "DAFFMetadataImpl.h"
 
-#include "Utils.h"
-
 #include <algorithm>
 #include <cassert>
 #include <iomanip>
 #include <sstream>
 
-class DAFFMetadataKey
-{
-public:
+#include "Utils.h"
+
+class DAFFMetadataKey {
+  public:
 	int m_iType;
 
-	inline DAFFMetadataKey(int iType) : m_iType(iType)
-	{};
+	inline DAFFMetadataKey(int iType) : m_iType(iType) {};
 
 	inline virtual ~DAFFMetadataKey() {};
 };
 
-class DAFFMetadataKeyBool : public DAFFMetadataKey
-{
-public:
+class DAFFMetadataKeyBool : public DAFFMetadataKey {
+  public:
 	bool m_bValue;
 
-	inline DAFFMetadataKeyBool(bool bValue)
-		: DAFFMetadataKey(DAFFMetadata::DAFF_BOOL), m_bValue(bValue) {};
+	inline DAFFMetadataKeyBool(bool bValue) : DAFFMetadataKey(DAFFMetadata::DAFF_BOOL), m_bValue(bValue) {};
 };
 
-class DAFFMetadataKeyInt : public DAFFMetadataKey
-{
-public:
+class DAFFMetadataKeyInt : public DAFFMetadataKey {
+  public:
 	int m_iValue;
 
-	inline DAFFMetadataKeyInt(int iValue)
-		: DAFFMetadataKey(DAFFMetadata::DAFF_INT), m_iValue(iValue) {};
+	inline DAFFMetadataKeyInt(int iValue) : DAFFMetadataKey(DAFFMetadata::DAFF_INT), m_iValue(iValue) {};
 };
 
-class DAFFMetadataKeyFloat : public DAFFMetadataKey
-{
-public:
+class DAFFMetadataKeyFloat : public DAFFMetadataKey {
+  public:
 	double m_dValue;
 
-	inline DAFFMetadataKeyFloat(double dValue)
-		: DAFFMetadataKey(DAFFMetadata::DAFF_FLOAT), m_dValue(dValue) {};
-
+	inline DAFFMetadataKeyFloat(double dValue) : DAFFMetadataKey(DAFFMetadata::DAFF_FLOAT), m_dValue(dValue) {};
 };
 
-class DAFFMetadataKeyString : public DAFFMetadataKey
-{
-public:
+class DAFFMetadataKeyString : public DAFFMetadataKey {
+  public:
 	std::string m_sValue;
 
 	inline DAFFMetadataKeyString(const std::string& sValue)
@@ -57,12 +47,12 @@ public:
 
 DAFFMetadataImpl::DAFFMetadataImpl() {}
 
-int DAFFMetadataImpl::load(void* pData, size_t &iBytesRead)
-{ 
-	char* p = (char*) pData;
+int DAFFMetadataImpl::load(void* pData, size_t& iBytesRead)
+{
+	char* p = (char*)pData;
 
 	// Read the number of keys
-	int* piNumKeys = (int*) p;
+	int* piNumKeys = (int*)p;
 	DAFF::le2se_4byte(piNumKeys, 1);
 	p += 4;
 
@@ -72,49 +62,47 @@ int DAFFMetadataImpl::load(void* pData, size_t &iBytesRead)
 	std::string sValue;
 
 	// Read the keys
-	for (int i=0; i<*piNumKeys; i++)
-	{
+	for (int i = 0; i < *piNumKeys; i++) {
 		// Datatype
-		piDatatype = (int*) p;
+		piDatatype = (int*)p;
 		DAFF::le2se_4byte(piDatatype, 1);
 		p += 4;
 
 		// Key name
 		std::string sKey(p);
-		p += sKey.length()+1;
+		p += sKey.length() + 1;
 
 		// Value
-		switch (*piDatatype)
-		{
+		switch (*piDatatype) {
 		case DAFF_BOOL:
-			piValue = (int*) p;
+			piValue = (int*)p;
 			DAFF::le2se_4byte(piValue, 1);
 			p += 4;
 
-			insertKey(sKey, new DAFFMetadataKeyBool( *piValue != 0 ));
+			insertKey(sKey, new DAFFMetadataKeyBool(*piValue != 0));
 			break;
 
 		case DAFF_INT:
-			piValue = (int*) p;
+			piValue = (int*)p;
 			DAFF::le2se_4byte(piValue, 1);
 			p += 4;
 
-			insertKey(sKey, new DAFFMetadataKeyInt( *piValue ));
+			insertKey(sKey, new DAFFMetadataKeyInt(*piValue));
 			break;
 
 		case DAFF_FLOAT:
-			pdValue = (double*) p;
+			pdValue = (double*)p;
 			DAFF::le2se_8byte(pdValue, 1);
 			p += 8;
 
-			insertKey(sKey, new DAFFMetadataKeyFloat( *pdValue ));
+			insertKey(sKey, new DAFFMetadataKeyFloat(*pdValue));
 			break;
 
 		case DAFF_STRING:
 			sValue = p;
-			p += sValue.length()+1;
+			p += sValue.length() + 1;
 
-			insertKey(sKey, new DAFFMetadataKeyString( sValue ));
+			insertKey(sKey, new DAFFMetadataKeyString(sValue));
 			break;
 
 		default:
@@ -122,7 +110,7 @@ int DAFFMetadataImpl::load(void* pData, size_t &iBytesRead)
 		}
 	}
 
-	iBytesRead = (size_t) (p - (char*)pData);
+	iBytesRead = (size_t)(p - (char*)pData);
 	return 0;
 }
 
@@ -138,26 +126,31 @@ bool DAFFMetadataImpl::isEmpty() const
 	return m_mKeys.empty();
 }
 
-bool DAFFMetadataImpl::hasKey(const std::string& sKey) const {
+bool DAFFMetadataImpl::hasKey(const std::string& sKey) const
+{
 	return (findKey(sKey) != NULL);
 }
 
-void DAFFMetadataImpl::getKeys(std::vector< std::string >& vsKeyList) const {
+void DAFFMetadataImpl::getKeys(std::vector<std::string>& vsKeyList) const
+{
 	vsKeyList.clear();
-	for (KeyMapConstIterator cit=m_mKeys.begin(); cit!=m_mKeys.end(); ++cit)
+	for (KeyMapConstIterator cit = m_mKeys.begin(); cit != m_mKeys.end(); ++cit)
 		vsKeyList.push_back(cit->first);
 }
 
-int DAFFMetadataImpl::getKeyType( const std::string& sKey ) const {
-	const DAFFMetadataKey* pKey = findKey( sKey );
-	return ( pKey != NULL ? pKey->m_iType : -1 );
+int DAFFMetadataImpl::getKeyType(const std::string& sKey) const
+{
+	const DAFFMetadataKey* pKey = findKey(sKey);
+	return (pKey != NULL ? pKey->m_iType : -1);
 }
 
-std::string DAFFMetadataImpl::getKeyString(const std::string& sKey) const {
+std::string DAFFMetadataImpl::getKeyString(const std::string& sKey) const
+{
 	const DAFFMetadataKey* pKey = findKey(sKey);
-	assert( pKey != NULL );
+	assert(pKey != NULL);
 
-	if (pKey == NULL) return "";
+	if (pKey == NULL)
+		return "";
 
 	std::stringstream ss;
 	switch (pKey->m_iType) {
@@ -181,68 +174,80 @@ std::string DAFFMetadataImpl::getKeyString(const std::string& sKey) const {
 	}
 }
 
-bool DAFFMetadataImpl::getKeyBool(const std::string& sKey) const {
+bool DAFFMetadataImpl::getKeyBool(const std::string& sKey) const
+{
 	const DAFFMetadataKey* pKey = findKey(sKey);
-	assert( pKey != NULL );
-	assert( pKey->m_iType == DAFF_BOOL );
+	assert(pKey != NULL);
+	assert(pKey->m_iType == DAFF_BOOL);
 
-	if ((pKey == NULL) || (pKey->m_iType != DAFF_BOOL)) return 0;
+	if ((pKey == NULL) || (pKey->m_iType != DAFF_BOOL))
+		return 0;
 	return dynamic_cast<const DAFFMetadataKeyBool*>(pKey)->m_bValue;
 }
 
-int DAFFMetadataImpl::getKeyInt(const std::string& sKey) const {
+int DAFFMetadataImpl::getKeyInt(const std::string& sKey) const
+{
 	const DAFFMetadataKey* pKey = findKey(sKey);
-	assert( pKey != NULL );
-	assert( pKey->m_iType == DAFF_INT );
+	assert(pKey != NULL);
+	assert(pKey->m_iType == DAFF_INT);
 
-	if ((pKey == NULL) || (pKey->m_iType != DAFF_INT)) return 0;
+	if ((pKey == NULL) || (pKey->m_iType != DAFF_INT))
+		return 0;
 	return dynamic_cast<const DAFFMetadataKeyInt*>(pKey)->m_iValue;
 }
 
-double DAFFMetadataImpl::getKeyFloat(const std::string& sKey) const {
+double DAFFMetadataImpl::getKeyFloat(const std::string& sKey) const
+{
 	const DAFFMetadataKey* pKey = findKey(sKey);
-	assert( pKey != NULL );
-	assert( (pKey->m_iType == DAFF_FLOAT) || (pKey->m_iType == DAFF_INT) );
+	assert(pKey != NULL);
+	assert((pKey->m_iType == DAFF_FLOAT) || (pKey->m_iType == DAFF_INT));
 
-	if (pKey == NULL) return 0;
-	if ((pKey->m_iType != DAFF_FLOAT) && (pKey->m_iType != DAFF_INT)) return 0;
+	if (pKey == NULL)
+		return 0;
+	if ((pKey->m_iType != DAFF_FLOAT) && (pKey->m_iType != DAFF_INT))
+		return 0;
 
 	if (pKey->m_iType == DAFF_FLOAT)
 		return dynamic_cast<const DAFFMetadataKeyFloat*>(pKey)->m_dValue;
 	else
-		return (double) dynamic_cast<const DAFFMetadataKeyInt*>(pKey)->m_iValue;
+		return (double)dynamic_cast<const DAFFMetadataKeyInt*>(pKey)->m_iValue;
 }
 
-std::string DAFFMetadataImpl::toString() const {
+std::string DAFFMetadataImpl::toString() const
+{
 	std::stringstream ss;
-	for (KeyMapConstIterator cit=m_mKeys.begin(); cit!=m_mKeys.end(); ++cit) {
+	for (KeyMapConstIterator cit = m_mKeys.begin(); cit != m_mKeys.end(); ++cit) {
 		ss << cit->first << " = " << getKeyString(cit->first) << std::endl;
 	}
 
 	return ss.str();
 }
 
-void DAFFMetadataImpl::insertKey(const std::string& sName, DAFFMetadataKey* pKey) {
-	// For later key search: Ensure that the keyname is upper case 
+void DAFFMetadataImpl::insertKey(const std::string& sName, DAFFMetadataKey* pKey)
+{
+	// For later key search: Ensure that the keyname is upper case
 	std::string sKeyUpper(sName);
-	std::transform(sKeyUpper.begin(), sKeyUpper.end(), sKeyUpper.begin(), (int(*)(int)) ::toupper);
+	std::transform(sKeyUpper.begin(), sKeyUpper.end(), sKeyUpper.begin(), (int (*)(int))::toupper);
 
 	m_mKeys[sKeyUpper] = pKey;
 };
 
-const DAFFMetadataKey* DAFFMetadataImpl::findKey(const std::string& sKey) const {
+const DAFFMetadataKey* DAFFMetadataImpl::findKey(const std::string& sKey) const
+{
 	// Empty strings are no valid key names
-	if (sKey.empty()) return NULL;
+	if (sKey.empty())
+		return NULL;
 
 	// Convert the keyname to upper case
 	std::string sKeyUpper(sKey);
-	std::transform(sKeyUpper.begin(), sKeyUpper.end(), sKeyUpper.begin(), (int(*)(int)) ::toupper);
+	std::transform(sKeyUpper.begin(), sKeyUpper.end(), sKeyUpper.begin(), (int (*)(int))::toupper);
 
 	// Search in the keymap
 	KeyMapConstIterator cit = m_mKeys.find(sKeyUpper);
 	return (cit == m_mKeys.end() ? NULL : cit->second);
 }
 
-void DAFFMetadataImpl::deleteMetadataKeyPair(const KeyPair& pKeyPair) {
+void DAFFMetadataImpl::deleteMetadataKeyPair(const KeyPair& pKeyPair)
+{
 	delete pKeyPair.second;
 }

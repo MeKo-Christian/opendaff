@@ -9,19 +9,20 @@
  *
  */
 
-#include "QtDAFFVizTestWindow.h"
 #include <QApplication>
 
-int main(int argc, char *argv[])
+#include "QtDAFFVizTestWindow.h"
+
+int main(int argc, char* argv[])
 {
-    QApplication a(argc, argv);
-    a.setOrganizationName( "Institute of Technical Acoustics" );
-    a.setOrganizationDomain( "akustik.rwth-aachen.de" );
-    a.setApplicationName( "DAFFVizQtTest" );
-    a.setApplicationDisplayName( "OpenDAFF" );
+	QApplication a(argc, argv);
+	a.setOrganizationName("Institute of Technical Acoustics");
+	a.setOrganizationDomain("akustik.rwth-aachen.de");
+	a.setApplicationName("DAFFVizQtTest");
+	a.setApplicationDisplayName("OpenDAFF");
 
 	QtDAFFVizTestWindow win;
-    win.show();
+	win.show();
 
-    return a.exec();
+	return a.exec();
 }

@@ -27,29 +27,30 @@
  *
  */
 
-#include "QDAFFViewerWindow.h"
 #include <QApplication>
 #include <QIcon>
 
-int main( int argc, char *argv[] )
-{
-	QApplication a( argc, argv );
+#include "QDAFFViewerWindow.h"
 
-	QCoreApplication::setOrganizationName( "OpenDAFF" );
-	QCoreApplication::setOrganizationDomain( "opendaff.org" );
-	QCoreApplication::setApplicationName( "DAFFViewer" );
-		
-    QString sPath;
-	if( argc == 2 )
-		sPath = argv[ 1 ];
+int main(int argc, char* argv[])
+{
+	QApplication a(argc, argv);
+
+	QCoreApplication::setOrganizationName("OpenDAFF");
+	QCoreApplication::setOrganizationDomain("opendaff.org");
+	QCoreApplication::setApplicationName("DAFFViewer");
+
+	QString sPath;
+	if (argc == 2)
+		sPath = argv[1];
 
 	QIcon icon;
-	icon.addFile( QStringLiteral( ":/icons/DAFFViewer_Window_Icon_16x16.gif" ), QSize(), QIcon::Normal, QIcon::On );
-	a.setWindowIcon( icon );
+	icon.addFile(QStringLiteral(":/icons/DAFFViewer_Window_Icon_16x16.gif"), QSize(), QIcon::Normal, QIcon::On);
+	a.setWindowIcon(icon);
 
-	QDAFFViewerWindow w( NULL, sPath );
+	QDAFFViewerWindow w(NULL, sPath);
 	w.show();
 
 
-    return a.exec();
+	return a.exec();
 }

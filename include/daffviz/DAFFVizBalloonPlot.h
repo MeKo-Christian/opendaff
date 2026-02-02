@@ -26,134 +26,123 @@ class vtkVectorText;
 
 class DAFFContent;
 
-namespace DAFFViz
-{
+namespace DAFFViz {
 
-	//! Simple directivity object node
-	/**
-	 * This class derived from the scene graph node class creates a directivity.
-	 */
+//! Simple directivity object node
+/**
+ * This class derived from the scene graph node class creates a directivity.
+ */
 
-	class DAFF_API BalloonPlot : public DAFFViz::SGNode
-	{
-	public:
-		enum
-		{
-			SCALING_LINEAR=0,
-			SCALING_DECIBEL
-		};
+class DAFF_API BalloonPlot : public DAFFViz::SGNode {
+  public:
+	enum { SCALING_LINEAR = 0, SCALING_DECIBEL };
 
-		enum
-		{
-			MODE_SURFACE=0,
-			MODE_WIREFRAME,
-			MODE_POINT
-		};
+	enum { MODE_SURFACE = 0, MODE_WIREFRAME, MODE_POINT };
 
-		BalloonPlot( SGNode* pParentNode, const DAFFContent* pContent );
-		BalloonPlot( const DAFFContent* pContent );
-		virtual ~BalloonPlot();
+	BalloonPlot(SGNode* pParentNode, const DAFFContent* pContent);
+	BalloonPlot(const DAFFContent* pContent);
+	virtual ~BalloonPlot();
 
-		// --= Object related methods =--
+	// --= Object related methods =--
 
-		//! Returns the currently selected frequency index
-		int GetSelectedFrequency() const;
+	//! Returns the currently selected frequency index
+	int GetSelectedFrequency() const;
 
-		//! Sets the currently selected frequency index
-		void SetSelectedFrequency( int iFreqIndex );
+	//! Sets the currently selected frequency index
+	void SetSelectedFrequency(int iFreqIndex);
 
-		//! Get scaling (SCALING_LINEAR | SCALING_DECIBEL)
-		int GetScaling() const;
+	//! Get scaling (SCALING_LINEAR | SCALING_DECIBEL)
+	int GetScaling() const;
 
-		//! Set scaling (SCALING_LINEAR | SCALING_DECIBEL)
-		void SetScaling( int iScaling );
+	//! Set scaling (SCALING_LINEAR | SCALING_DECIBEL)
+	void SetScaling(int iScaling);
 
-		//! Set minimum of data range (in dB or absolute values depending on currently used scaling)
-		double GetRangeMin() const;
-	
-		//! Set minimum of data range (in dB or absolute values depending on currently used scaling)
-		double GetRangeMax() const;
+	//! Set minimum of data range (in dB or absolute values depending on currently used scaling)
+	double GetRangeMin() const;
 
-		//! Set data range (in dB or absolute values depending on currently used scaling)
-		void SetRange( double dMin, double dMax );
+	//! Set minimum of data range (in dB or absolute values depending on currently used scaling)
+	double GetRangeMax() const;
 
-		//! set wether the magnitudes should be normalized to a custom range
-		void SetUseCustomRange(bool bChecked);
+	//! Set data range (in dB or absolute values depending on currently used scaling)
+	void SetRange(double dMin, double dMax);
 
-		//! Set whether scalars should be used to color the model
-		void SetScalarVisibility( bool bVisible );
+	//! set wether the magnitudes should be normalized to a custom range
+	void SetUseCustomRange(bool bChecked);
 
-		//! Get whether scalars should be used to color the model
-		int GetScalarVisibility();
+	//! Set whether scalars should be used to color the model
+	void SetScalarVisibility(bool bVisible);
 
-		//! Set display mode (MODE_SURFACE | MODE_WIREFRAME | MODE_POINT)
-		void SetDisplayMode( int iMode );
+	//! Get whether scalars should be used to color the model
+	int GetScalarVisibility();
 
-		//! Set active channel
-		void SetChannel( int iChannel );
+	//! Set display mode (MODE_SURFACE | MODE_WIREFRAME | MODE_POINT)
+	void SetDisplayMode(int iMode);
 
-		//! get active channel
-		int GetChannel();
+	//! Set active channel
+	void SetChannel(int iChannel);
 
-		//! Enable/Disable warping (WARP_DISABLE | WARP_ENABLE)
-		// \note default: enabled
-		void EnableWarp();
-		void DisableWarp();
+	//! get active channel
+	int GetChannel();
 
-		//! set wether the magnitudes should be normalized
-		void SetNormalize(bool bChecked);
+	//! Enable/Disable warping (WARP_DISABLE | WARP_ENABLE)
+	// \note default: enabled
+	void EnableWarp();
+	void DisableWarp();
 
-		//! set wether the magnitudes should be normalized for each individual frequency
-		void SetNormalizeFrequenciesIndividually(bool bChecked);
+	//! set wether the magnitudes should be normalized
+	void SetNormalize(bool bChecked);
 
-		//! set whether the phase should be used for coloring. If not, the magnitude will be used.
-		void SetUsePhaseAsColor( bool bUse );
-	
-		//! Set probe angles
-		void SetProbeAngles( double dAlpha, double dBeta );
+	//! set wether the magnitudes should be normalized for each individual frequency
+	void SetNormalizeFrequenciesIndividually(bool bChecked);
 
-		//! Enables/disables probe
-		void SetProbeVisible( bool bVisible );
+	//! set whether the phase should be used for coloring. If not, the magnitude will be used.
+	void SetUsePhaseAsColor(bool bUse);
 
-		//! Update probe nodes
-		void UpdateProbe();
-	private:
+	//! Set probe angles
+	void SetProbeAngles(double dAlpha, double dBeta);
 
-		const DAFFContent* m_pContent;
-		vtkSmartPointer< vtkWarpScalar > m_pWarp;
-		vtkSmartPointer< vtkPolyDataMapper > m_pMapper;
-		vtkSmartPointer< vtkActor > m_pPlotActor;
-		vtkSmartPointer< vtkPolyData > m_pPlotPolydata;
-		vtkSmartPointer< vtkDoubleArray > m_pNormals;
-		int m_iFrequency;
-		int m_iNumFrequencies;
-		int m_iScaling;
-		float m_dMin, m_dMax, m_dProbeAlpha, m_dProbeBeta; // linear factors!
-		int m_iChannel;
-		bool m_bWarp, m_bUsePhaseAsColor;
-		bool m_bNormalize, m_bNormalizeFreqsIndiv, m_bUseCustomRange;
-		vtkSmartPointer< vtkActor > m_pProbe;
-		vtkSmartPointer< vtkVectorText > m_pProbeLabel;
-		vtkSmartPointer< vtkActor > m_pLabel;
+	//! Enables/disables probe
+	void SetProbeVisible(bool bVisible);
 
-		// The initializer generates dynamic objects like source, mapper, actor ...
-		void init();
+	//! Update probe nodes
+	void UpdateProbe();
 
-		// Update scalars (e.g. when selected frequency changed)
-		void SetScalars();
+  private:
+	const DAFFContent* m_pContent;
+	vtkSmartPointer<vtkWarpScalar> m_pWarp;
+	vtkSmartPointer<vtkPolyDataMapper> m_pMapper;
+	vtkSmartPointer<vtkActor> m_pPlotActor;
+	vtkSmartPointer<vtkPolyData> m_pPlotPolydata;
+	vtkSmartPointer<vtkDoubleArray> m_pNormals;
+	int m_iFrequency;
+	int m_iNumFrequencies;
+	int m_iScaling;
+	float m_dMin, m_dMax, m_dProbeAlpha, m_dProbeBeta;  // linear factors!
+	int m_iChannel;
+	bool m_bWarp, m_bUsePhaseAsColor;
+	bool m_bNormalize, m_bNormalizeFreqsIndiv, m_bUseCustomRange;
+	vtkSmartPointer<vtkActor> m_pProbe;
+	vtkSmartPointer<vtkVectorText> m_pProbeLabel;
+	vtkSmartPointer<vtkActor> m_pLabel;
 
-		// Convert orientation (phi, theta) into cartesian coordiates (x,y,z)
-		void sph2cart( double phi, double theta, double& x, double& y, double& z );
+	// The initializer generates dynamic objects like source, mapper, actor ...
+	void init();
 
-		// Convert a linear value into decibel
-		float FactorToDecibel( float x ) const;
-	
-		// Convert decibel to linear value
-		float DecibelToFactor( float x ) const;
+	// Update scalars (e.g. when selected frequency changed)
+	void SetScalars();
 
-		float  getMagnitudeMaximum() const;
-	};
+	// Convert orientation (phi, theta) into cartesian coordiates (x,y,z)
+	void sph2cart(double phi, double theta, double& x, double& y, double& z);
 
-} // End of namespace "DAFFViz"
+	// Convert a linear value into decibel
+	float FactorToDecibel(float x) const;
 
-#endif //  IW_DAFF_DIRECTIVITY
+	// Convert decibel to linear value
+	float DecibelToFactor(float x) const;
+
+	float getMagnitudeMaximum() const;
+};
+
+}  // namespace DAFFViz
+
+#endif  //  IW_DAFF_DIRECTIVITY

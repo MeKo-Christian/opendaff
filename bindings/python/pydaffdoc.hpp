@@ -13,13 +13,10 @@
 
 #include <Python.h>
 
-PyDoc_STRVAR( daff_doc,
-	"open( filepath ) - Open a DAFF file from a file path\n"
-	"close() - close the DAFF file." );
+PyDoc_STRVAR(daff_doc, "open( filepath ) - Open a DAFF file from a file path\n"
+					   "close() - close the DAFF file.");
 
-PyDoc_STRVAR( no_doc,
-	"For this method no dedicated documentation is available. Please read the C++ API documentation\n"
-	"of this method for further information." );
+PyDoc_STRVAR(no_doc, "For this method no dedicated documentation is available. Please read the C++ API documentation\n"
+					 "of this method for further information.");
 
-PyDoc_STRVAR( open_doc,
-	"open( filepath ): open a DAFF file\n" );
+PyDoc_STRVAR(open_doc, "open( filepath ): open a DAFF file\n");

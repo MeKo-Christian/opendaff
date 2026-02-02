@@ -11,19 +11,24 @@
 
 #include <algorithm>
 #include <iostream>
-#include "../../src/DAFFMetadataImpl.h"
+
 #include "../../src/DAFFMetadataImpl.cpp"
+#include "../../src/DAFFMetadataImpl.h"
 #include "../../src/Utils.cpp"
 
 using namespace std;
 
-void PrintKey(const std::string& s) { cout << "Key: " << s << endl; }
+void PrintKey(const std::string& s)
+{
+	cout << "Key: " << s << endl;
+}
 
-int main() {
+int main()
+{
 	DAFFMetadataImpl* md = new DAFFMetadataImpl;
 
-	//DAFFMetadataKey* sKey;
-	//md->insertKey("Robot", new DAFFMetadataKeyString( "I am one." ));
+	// DAFFMetadataKey* sKey;
+	// md->insertKey("Robot", new DAFFMetadataKeyString( "I am one." ));
 
 	cout << md->toString() << endl;
 
@@ -33,10 +38,10 @@ int main() {
 
 	cout << "hasKey(Robot) = " << md->hasKey("Robot") << endl;
 	cout << "getStringKey(Robot) = " << md->getKeyString("Robot") << endl;
-	
+
 	// Force error:
 	cout << "getIntKey(Robot) = " << md->getKeyInt("Robot") << endl;
-	
+
 	delete md;
 	return 0;
 }

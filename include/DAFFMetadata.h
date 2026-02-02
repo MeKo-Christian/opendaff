@@ -13,6 +13,7 @@
 #define IW_DAFF_METADATA
 
 #include <DAFFDefs.h>
+
 #include <string>
 #include <vector>
 
@@ -28,25 +29,23 @@
  *       Other methods cause errors when they are called on keys of wrong datatype.
  *       (e.g. getKeyBool for a floating-point key)
  */
-class DAFF_API DAFFMetadata
-{
-public:
+class DAFF_API DAFFMetadata {
+  public:
 	//! Metadata types
 	enum {
-		DAFF_BOOL=0,	//<! Boolean (true|false, yes|no)
-		DAFF_INT=1,		//<! Integer number
-		DAFF_FLOAT=2,  //<! Floating-point number
-		DAFF_STRING=3  //<! String
+		DAFF_BOOL = 0,   //<! Boolean (true|false, yes|no)
+		DAFF_INT = 1,    //<! Integer number
+		DAFF_FLOAT = 2,  //<! Floating-point number
+		DAFF_STRING = 3  //<! String
 	};
 
 	//! Destructor
 	inline virtual ~DAFFMetadata() {};
 
 	//! Returns a string describing the key type
-	static inline std::string GetKeyTypeString( int iType )
+	static inline std::string GetKeyTypeString(int iType)
 	{
-		switch( iType )
-		{
+		switch (iType) {
 		case DAFFMetadata::DAFF_STRING:
 			return "String";
 		case DAFFMetadata::DAFF_BOOL:
@@ -61,37 +60,37 @@ public:
 	};
 
 	//! Returns if metadata does not contain any keys
-	virtual bool isEmpty() const=0;
+	virtual bool isEmpty() const = 0;
 
 	//! Checks for existence of a key
-	virtual bool hasKey(const std::string& sKey) const=0;
+	virtual bool hasKey(const std::string& sKey) const = 0;
 
 	//! Returns a list of all keys
-	virtual void getKeys(std::vector< std::string >& vsKeyList) const=0;
+	virtual void getKeys(std::vector<std::string>& vsKeyList) const = 0;
 
 	//! Returns the datatype of a key
-	virtual int getKeyType(const std::string& sKey) const=0;
+	virtual int getKeyType(const std::string& sKey) const = 0;
 
 	//! Returns the value of a string key
 	/**
 	 * Note: This method may be called for every key, no matter what type
 	 */
-	virtual std::string getKeyString(const std::string& sKey) const=0;
+	virtual std::string getKeyString(const std::string& sKey) const = 0;
 
 	//! Returns the value (true|false) of a boolean key
-	virtual bool getKeyBool(const std::string& sKey) const=0;
+	virtual bool getKeyBool(const std::string& sKey) const = 0;
 
 	//! Returns the value of a integer number key
-	virtual int getKeyInt(const std::string& sKey) const=0;
+	virtual int getKeyInt(const std::string& sKey) const = 0;
 
 	//! Returns the value of a floating-point number key
 	/**
 	 * Note: This method may also be called for INT keys
 	 */
-	virtual double getKeyFloat(const std::string& sKey) const=0;
+	virtual double getKeyFloat(const std::string& sKey) const = 0;
 
 	//! Return information on the metadata as string
-	virtual std::string toString() const=0;
+	virtual std::string toString() const = 0;
 };
 
-#endif // IW_DAFF_METADATA
+#endif  // IW_DAFF_METADATA

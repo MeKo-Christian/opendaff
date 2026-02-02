@@ -1,0 +1,71 @@
+# EditorConfig for OpenDAFF
+# https://editorconfig.org
+
+root = true
+
+# Default settings
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# C/C++ files
+[*.{c,cpp,cc,cxx,h,hpp,hxx}]
+indent_style = tab
+indent_size = 4
+tab_width = 4
+
+# CMake files
+[{CMakeLists.txt,*.cmake}]
+indent_style = space
+indent_size = 4
+
+# Python files
+[*.py]
+indent_style = space
+indent_size = 4
+max_line_length = 88
+
+# C# files
+[*.cs]
+indent_style = space
+indent_size = 4
+
+# Matlab files
+[*.m]
+indent_style = space
+indent_size = 4
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# YAML files
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Shell scripts
+[*.sh]
+indent_style = space
+indent_size = 2
+
+# Makefiles
+[{Makefile,*.mk}]
+indent_style = tab
+
+# Just files
+[justfile]
+indent_style = space
+indent_size = 4
+
+# Windows batch files (preserve CRLF)
+[*.bat]
+end_of_line = crlf
