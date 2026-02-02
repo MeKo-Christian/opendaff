@@ -13,6 +13,7 @@
 #include <DAFF.h>
 #include <string>
 #include <cstring>
+#include <vector>
 
 // Thread-local storage for error messages
 static thread_local std::string g_lastError;
@@ -378,9 +379,22 @@ bool GoDAFF_ContentMPS_GetCoefficients(GoDAFFContentHandle content, int recordIn
 	if (!content || !magnitudes || !phases)
 		return false;
 	DAFFContentMPS* mps = static_cast<DAFFContentMPS*>(content);
-	if (bufferSize < mps->getNumFrequencies())
+	int numFreqs = mps->getNumFrequencies();
+	if (bufferSize < numFreqs)
 		return false;
-	mps->getCoefficientsMP(recordIndex, channel, magnitudes, phases);
+
+	// Allocate temporary buffer for interleaved data (Mag[0], Ph[0], Mag[1], Ph[1], ...)
+	std::vector<float> interleaved(numFreqs * 2);
+	int result = mps->getCoefficientsMP(recordIndex, channel, interleaved.data());
+	if (result != DAFF_NO_ERROR)
+		return false;
+
+	// De-interleave into separate magnitude and phase arrays
+	for (int i = 0; i < numFreqs; i++) {
+		magnitudes[i] = interleaved[i * 2];
+		phases[i] = interleaved[i * 2 + 1];
+	}
+
 	return true;
 }
 

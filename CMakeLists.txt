@@ -146,6 +146,11 @@ else( )
 	message( "Building static OpenDAFF library" )
 	set_property( TARGET DAFF PROPERTY FOLDER "DAFFLibs" )
 
+	# Enable PIC for static library when it will be linked into shared libraries (bindings)
+	if( OPENDAFF_WITH_GO_BINDING OR OPENDAFF_WITH_PYTHON_BINDING OR OPENDAFF_WITH_CSHARP_BINDING )
+		set_property( TARGET DAFF PROPERTY POSITION_INDEPENDENT_CODE ON )
+	endif( )
+
 endif( )
 
 install( TARGETS DAFF RUNTIME DESTINATION "bin" LIBRARY DESTINATION "lib" ARCHIVE DESTINATION "lib" )
