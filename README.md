@@ -1,5 +1,10 @@
 # OpenDAFF - A free, open source software package for directional audio data
 
+[![CI](https://github.com/MeKo-Tech/opendaff/actions/workflows/ci.yml/badge.svg)](https://github.com/MeKo-Tech/opendaff/actions/workflows/ci.yml)
+[![Bindings](https://github.com/MeKo-Tech/opendaff/actions/workflows/bindings.yml/badge.svg)](https://github.com/MeKo-Tech/opendaff/actions/workflows/bindings.yml)
+[![Release](https://github.com/MeKo-Tech/opendaff/actions/workflows/release.yml/badge.svg)](https://github.com/MeKo-Tech/opendaff/actions/workflows/release.yml)
+[![Documentation](https://github.com/MeKo-Tech/opendaff/actions/workflows/docs.yml/badge.svg)](https://github.com/MeKo-Tech/opendaff/actions/workflows/docs.yml)
+
 > **Note:** This is a fork of the original OpenDAFF repository maintained by the Institute of Technical Acoustics (ITA) at RWTH Aachen University. The original repository can be found at: [https://git.rwth-aachen.de/ita/OpenDAFF](https://git.rwth-aachen.de/ita/OpenDAFF)
 
 OpenDAFF is a free and open source software package for directional audio content like directivities of sound sources (e.g. loudspeakers, musical instruments) and sound receivers (e.g. microphones, head-related transfer functions, HRIRs/HRTFs).

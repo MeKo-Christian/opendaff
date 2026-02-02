@@ -48,6 +48,10 @@ if( NOT DEFINED OPENDAFF_WITH_PYTHON_BINDING )
 	set( OPENDAFF_WITH_PYTHON_BINDING OFF CACHE BOOL "Build OpenDAFF Python binding (includes a C module and a Python DAFF class)" )
 endif( )
 
+if( NOT DEFINED OPENDAFF_WITH_GO_BINDING )
+	set( OPENDAFF_WITH_GO_BINDING OFF CACHE BOOL "Build OpenDAFF Go binding (includes a C wrapper library for CGO)" )
+endif( )
+
 if( FFTW_FOUND )
 	include_directories( "${FFTW_INCLUDE_DIR}" )
 endif( )
@@ -284,6 +288,17 @@ if( OPENDAFF_WITH_PYTHON_BINDING )
 	if( OPENDAFF_BUILD_DAFFLIBS_SHARED )
 		install( TARGETS DAFF RUNTIME DESTINATION "python" )
 	endif( )
+
+endif( )
+
+
+if( OPENDAFF_WITH_GO_BINDING )
+
+	add_subdirectory( "bindings/go" )
+	install( FILES "bindings/go/README.md" DESTINATION "go" )
+	install( FILES "bindings/go/go.mod" DESTINATION "go" )
+	install( FILES "bindings/go/daff.go" DESTINATION "go" )
+	install( FILES "bindings/go/daff_test.go" DESTINATION "go" )
 
 endif( )
 

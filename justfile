@@ -139,6 +139,24 @@ install-python:
 build-python-lib:
     cd bindings/python && python setup_with_lib.py build
 
+# Build Go bindings (C wrapper via CMake + Go module)
+build-go BUILD_DIR="build-go":
+    cmake -B {{ BUILD_DIR }} -S . -DOPENDAFF_WITH_GO_BINDING=ON
+    @just build {{ BUILD_DIR }}
+    cd bindings/go && go build
+
+# Test Go bindings
+test-go:
+    cd bindings/go && go test -v
+
+# Install Go module locally
+install-go:
+    cd bindings/go && go install
+
+# Format Go code
+fmt-go:
+    cd bindings/go && gofmt -w .
+
 # Build Matlab bindings (requires Matlab with mex compiler)
 build-matlab:
     #!/usr/bin/env bash
@@ -219,6 +237,7 @@ show-options:
     @echo "OPENDAFF_BUILD_DAFF_BINDINGS_MATLAB - Build Matlab bindings"
     @echo "OPENDAFF_WITH_CSHARP_BINDING       - Build C# bindings"
     @echo "OPENDAFF_WITH_PYTHON_BINDING       - Build Python bindings"
+    @echo "OPENDAFF_WITH_GO_BINDING           - Build Go bindings"
     @echo "OPENDAFF_BUILD_DAFF_DOCUMENTATION  - Generate Doxygen docs"
 
 # Example: Run DAFFTool on a sample file

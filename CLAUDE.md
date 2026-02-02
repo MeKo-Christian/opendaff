@@ -12,7 +12,7 @@ OpenDAFF is a free and open-source software package for directional audio conten
 - **DAFFViz**: Visualization library using VTK and Qt
 - **DAFFTool**: Command-line utility for file inspection and data extraction
 - **DAFFViewer**: GUI application for visualization and data extraction
-- Bindings for Matlab, Python, and C#
+- Bindings for Matlab, Python, C#, and Go
 - Matlab scripts for generating DAFF content
 
 ## Build System
@@ -73,6 +73,7 @@ Enable optional components via CMake switches (prefix: `OPENDAFF_*`):
 - `OPENDAFF_BUILD_DAFF_BINDINGS_MATLAB`: Build Matlab mex file
 - `OPENDAFF_WITH_CSHARP_BINDING`: Build C# wrapper and bindings
 - `OPENDAFF_WITH_PYTHON_BINDING`: Build Python C extension
+- `OPENDAFF_WITH_GO_BINDING`: Build Go wrapper and bindings
 - `OPENDAFF_BUILD_DAFF_DOCUMENTATION`: Generate Doxygen docs
 
 **Just commands for specific builds:**
@@ -83,6 +84,7 @@ just build-tool       # Build DAFFTool
 just build-viewer     # Build DAFFViewer
 just build-tests      # Build tests
 just build-python     # Build Python bindings
+just build-go         # Build Go bindings
 just build-matlab     # Build Matlab bindings (requires Matlab)
 just build-docs       # Generate documentation
 ```
@@ -192,6 +194,14 @@ DAFF supports five content types (see [FILEFORMAT.md](FILEFORMAT.md)):
 
 - Wrapper DLL + C# DAFF class
 - Test project: [DAFFTest.csproj](bindings/csharp/DAFFTest.csproj)
+
+**Go:** [bindings/go/](bindings/go/)
+
+- Build: `just build-go` or manually with CMake + `go build`
+- Uses CGO to call C wrapper around C++ library
+- Idiomatic Go API with proper error handling
+- Example: [bindings/go/daff_test.go](bindings/go/daff_test.go)
+- Full documentation: [bindings/go/README.md](bindings/go/README.md)
 
 ## Testing
 
