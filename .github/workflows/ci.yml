@@ -197,6 +197,59 @@ jobs:
         run: |
           python daff_example.py || echo "Example requires DAFF test files"
 
+  go-bindings:
+    name: Go Bindings (${{ matrix.os }}, Go ${{ matrix.go-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        go-version: ["1.20", "1.21", "1.22"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Install build dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential
+
+      - name: Install build dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install cmake
+
+      - name: Install build dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+
+      - name: Build DAFF library
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DOPENDAFF_WITH_GO_BINDING=ON
+          cmake --build build --config Release
+
+      - name: Build Go bindings
+        working-directory: bindings/go
+        run: |
+          go build -v ./...
+
+      - name: Run Go tests
+        working-directory: bindings/go
+        run: |
+          go test -v ./...
+
+      - name: Test Go module
+        working-directory: bindings/go
+        run: |
+          go list -m all
+
   can-build-tools:
     name: Can Build DAFFTool & DAFFViewer
     runs-on: ubuntu-latest
