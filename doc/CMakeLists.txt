@@ -3,7 +3,7 @@ cmake_minimum_required( VERSION 3.10 )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 
 #cmake_policy( SET CMP0057 NEW )
-find_package( doxygen REQUIRED )
+find_package( Doxygen REQUIRED )
 
 configure_file( doxyfile.in doxyfile @ONLY )
 configure_file( doxygen.footer.html.in doxygen.footer.html @ONLY )
