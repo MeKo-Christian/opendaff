@@ -46,7 +46,7 @@ static int g_iLastHandle = 0;                 //!< Stores ID of last used handle
 static PyObject* g_pDAFFError = nullptr;      //!< Static pointer to error instance
 
 
-void GetRecordPython(DAFFReader* pReader, int iRecordIndex, PyObject*& listResult);
+static void GetRecordPython(DAFFReader* pReader, int iRecordIndex, PyObject*& listResult);
 
 bool ValidHandle(const int iHandle)
 {
